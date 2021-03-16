@@ -1,0 +1,71 @@
+---
+title: "Game Theory Practice"
+output: rmarkdown::github_document
+---
+
+```{r setup, include=FALSE}
+library(rmarkdown)
+library(data.table)
+library(tidyverse)
+knitr::opts_chunk$set(echo = FALSE)
+
+set.seed(42069)
+
+make_payoff <- function(){
+  return(str_c(round(runif(3, -3.5, 3.5)),
+               round(runif(3, -3.5, 3.5)),
+               sep = ','))
+}
+
+create_game <- function(){
+  df <- data.table(
+    'a' = make_payoff(),
+    'b' = make_payoff(),
+    'c' = make_payoff()
+  )
+  return(df)
+}
+```
+## 3 by 3 Game Practice
+
+### Question 1
+
+```{r}
+create_game()
+```
+
+Proposed Solution: 
+
+* Pure Strategies: (1;b), (3;c)
+* Mixed Strategies: (3/5, 0, 2/5;0, 5/9, 4/9)
+
+### Question 2 
+
+```{r}
+create_game()
+```
+
+Proposed Solution: 
+
+* Pure Strategies: (2;b)
+
+### Question 3
+
+```{r}
+create_game()
+```
+
+Proposed Solution: 
+
+* Mixed/Pure Strategies: (1;q,1-q,0) for q in [0,1]
+
+### Question 4
+
+```{r}
+create_game()
+```
+
+Proposed Solution: 
+
+* Pure Strategies: (3;b), (1;c)
+* Mixed Strategies: (1/4, 0, 3/4; 0, 1/5, 4/5)
