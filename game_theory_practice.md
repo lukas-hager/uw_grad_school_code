@@ -63,3 +63,32 @@ Proposed Solution:
     ## 1: -3,2   2,2 2,1
     ## 2: 1,-1 -2,-2 3,2
     ## 3:  0,3   1,1 3,2
+
+Proposed Solution:
+
+  - Pure Strategies: (1;b), (2;c)
+  - Mixed Strategies: Didn’t spend time finding
+
+### Question 6
+
+    ##        a    b    c
+    ## 1:   2,1  0,3  2,3
+    ## 2:  -3,0 2,-3 -1,3
+    ## 3: -2,-3  2,0 -3,3
+
+Proposed Solution:
+
+  - Pure Strategies: (2;c)
+  - Mixed Strategies: (1; 0, q, 1-q) for q in \[0, 3/5\]
+
+### Question 7
+
+    ##        a     b    c
+    ## 1: -3,-3 -2,-2 -3,0
+    ## 2:  3,-3  -2,1  2,3
+    ## 3:  -3,3   0,3 -1,0
+
+Proposed Solution:
+
+  - Pure Strategies: (3; b), (2; c)
+  - Mixed Strategies: (0, 3/5, 2/5; 0, 3/5, 2/5)

@@ -85,3 +85,30 @@ Proposed Solution:
 ```{r}
 create_game()
 ```
+
+Proposed Solution:
+
+* Pure Strategies: (1;b), (2;c)
+* Mixed Strategies: Didn't spend time finding
+
+### Question 6
+
+```{r}
+create_game()
+```
+
+Proposed Solution:
+
+* Pure Strategies: (2;c)
+* Mixed Strategies: (1; 0, q, 1-q) for q in [0, 3/5]
+
+### Question 7
+
+```{r}
+create_game()
+```
+
+Proposed Solution:
+
+* Pure Strategies: (3; b), (2; c)
+* Mixed Strategies: (0, 3/5, 2/5; 0, 3/5, 2/5)
