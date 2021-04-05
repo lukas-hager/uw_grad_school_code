@@ -1,20 +1,28 @@
+Hanson Problem 10.29
+================
+
+## Clear Environment and Import Packages
+
+``` r
 rm(list = ls())
 
 gc()
 gc()
 
-library(data.table)
-library(broom)
-library(knitr)
-library(sandwich)
-library(MASS)
-library(tidyverse)
+library(data.table) # probably not important for this
+library(broom) # create regression tables
+library(knitr) # create kables for latex
+library(sandwich) # make nice HC covariance matrices
+library(MASS) # some statistics package
+library(tidyverse) # important for data manipulation, includes dplyr
+```
 
+## Hanson Problem 9.27
+
+### Replicate 8.12
+
+``` r
 set.seed(2021)
-
-#########################################################
-# Exercise 9.27
-#########################################################
 
 # read in data
 
@@ -50,11 +58,165 @@ data.table('term' = mrw_basic_reg_summary$term,
            'estimate' = mrw_basic_reg_summary$estimate,
            'std.error' = se_mrw) %>% 
   kable(.,
-        format = 'latex',
+        format = 'html',
         digits = 2,
         align = 'lrr',
         caption = 'Estimates of Solow Growth Model')
+```
 
+<table>
+
+<caption>
+
+Estimates of Solow Growth Model
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+term
+
+</th>
+
+<th style="text-align:right;">
+
+estimate
+
+</th>
+
+<th style="text-align:right;">
+
+std.error
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+(Intercept)
+
+</td>
+
+<td style="text-align:right;">
+
+3.02
+
+</td>
+
+<td style="text-align:right;">
+
+0.74
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+log\_gdp
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.29
+
+</td>
+
+<td style="text-align:right;">
+
+0.05
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+log\_i
+
+</td>
+
+<td style="text-align:right;">
+
+0.52
+
+</td>
+
+<td style="text-align:right;">
+
+0.11
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+log\_vars
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.51
+
+</td>
+
+<td style="text-align:right;">
+
+0.24
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+log\_school
+
+</td>
+
+<td style="text-align:right;">
+
+0.23
+
+</td>
+
+<td style="text-align:right;">
+
+0.07
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+### Run Wald Test
+
+``` r
 # define parameters for test
 
 beta_ols <- mrw_basic_reg_summary$estimate
@@ -76,11 +238,15 @@ w_n <- t(constraint) %*% ginv(t(R) %*% V_mrw %*% R) %*% constraint %>%
 p_wald <- round(1 - pchisq(w_n, df = q), 2)
 wald_text <- 'The p-value of the Wald test is ${p_wald}.'
 cat(str_interp(wald_text))
+```
 
-#########################################################
-# Exercise 10.29
-#########################################################
+The p-value of the Wald test is 0.36.
 
+## Hanson Problem 10.29
+
+### Get Jackknife Estimates
+
+``` r
 # get beta estimators from jackknife
 
 data_id <- mrw_reg %>% 
@@ -116,7 +282,11 @@ mats <- map(c(1:nrow(data_id)), function(x){
 
 var_jk <- ((n-1)/n) * Reduce('+', mats)
 se_jk <- sqrt(diag(var_jk))
+```
 
+### Get Bootstrap Estimates
+
+``` r
 # construct bootstrap estimator
 
 beta_boot <- map_dfr(c(1:nrow(data_id)), function(x){
@@ -150,20 +320,248 @@ mats <- map(c(1:nrow(data_id)), function(x){
 
 var_boot <- (1/(n-1)) * Reduce('+', mats)
 se_boot <- sqrt(diag(var_boot))
+```
 
+### Return Estimates in Table Form
+
+``` r
 data.table('Term' = mrw_basic_reg_summary$term,
            'Estimate' = mrw_basic_reg_summary$estimate,
            'SE Asymptotic' = se_mrw,
            'SE Jackknife' = se_jk,
            'SE Bootstrap' = se_boot) %>% 
   kable(.,
-        format = 'latex',
+        format = 'html',
         digits = 2,
         align = 'lrrrr',
         caption = 'Estimates of Solow Growth Model')
+```
 
-# estimation of theta is straightforward
+<table>
 
+<caption>
+
+Estimates of Solow Growth Model
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+Term
+
+</th>
+
+<th style="text-align:right;">
+
+Estimate
+
+</th>
+
+<th style="text-align:right;">
+
+SE Asymptotic
+
+</th>
+
+<th style="text-align:right;">
+
+SE Jackknife
+
+</th>
+
+<th style="text-align:right;">
+
+SE Bootstrap
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+(Intercept)
+
+</td>
+
+<td style="text-align:right;">
+
+3.02
+
+</td>
+
+<td style="text-align:right;">
+
+0.74
+
+</td>
+
+<td style="text-align:right;">
+
+0.76
+
+</td>
+
+<td style="text-align:right;">
+
+0.71
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+log\_gdp
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.29
+
+</td>
+
+<td style="text-align:right;">
+
+0.05
+
+</td>
+
+<td style="text-align:right;">
+
+0.06
+
+</td>
+
+<td style="text-align:right;">
+
+0.05
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+log\_i
+
+</td>
+
+<td style="text-align:right;">
+
+0.52
+
+</td>
+
+<td style="text-align:right;">
+
+0.11
+
+</td>
+
+<td style="text-align:right;">
+
+0.11
+
+</td>
+
+<td style="text-align:right;">
+
+0.11
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+log\_vars
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.51
+
+</td>
+
+<td style="text-align:right;">
+
+0.24
+
+</td>
+
+<td style="text-align:right;">
+
+0.24
+
+</td>
+
+<td style="text-align:right;">
+
+0.22
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+log\_school
+
+</td>
+
+<td style="text-align:right;">
+
+0.23
+
+</td>
+
+<td style="text-align:right;">
+
+0.07
+
+</td>
+
+<td style="text-align:right;">
+
+0.07
+
+</td>
+
+<td style="text-align:right;">
+
+0.07
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+## Estimate Theta and SEs
+
+``` r
 theta <- mrw_basic_reg_summary %>% 
   filter(term %in% c('log_i', 'log_vars', 'log_school')) %>% 
   pull(estimate) %>% 
@@ -180,14 +578,91 @@ data.table('Theta' = theta,
            'SE Jackknife' = get_theta_var(var_boot),
            'SE Bootstrap' = get_theta_var(var_jk)) %>% 
   kable(.,
-        format = 'latex',
+        format = 'html',
         digits = 2,
         align = 'lrrr',
         caption = 'Estimate of Theta in Solow Growth Model')
+```
 
-# confidence interval by percentile method requires knowing 
-# quantiles of the beta estimates
+<table>
 
+<caption>
+
+Estimate of Theta in Solow Growth Model
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+Theta
+
+</th>
+
+<th style="text-align:right;">
+
+SE Asymptotic
+
+</th>
+
+<th style="text-align:right;">
+
+SE Jackknife
+
+</th>
+
+<th style="text-align:right;">
+
+SE Bootstrap
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+0.25
+
+</td>
+
+<td style="text-align:right;">
+
+0.27
+
+</td>
+
+<td style="text-align:right;">
+
+0.26
+
+</td>
+
+<td style="text-align:right;">
+
+0.28
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+## Get Bootstrapped Confidence Intervals
+
+### Percentile Confidence Interval
+
+``` r
 theta_boot <- beta_boot %>% 
   mutate(theta = log_i + log_vars + log_school) %>% 
   pull()
@@ -195,11 +670,65 @@ theta_boot <- beta_boot %>%
 quantile(theta_boot, c(.025, .975)) %>% 
   t() %>% 
   kable(.,
-        format = 'latex',
+        format = 'html',
         digits = 2,
         align = 'rr',
         caption = 'Bootstrapped CIs Using Percentile Method')
-a
+```
+
+<table>
+
+<caption>
+
+Bootstrapped CIs Using Percentile Method
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:right;">
+
+2.5%
+
+</th>
+
+<th style="text-align:right;">
+
+97.5%
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:right;">
+
+\-0.23
+
+</td>
+
+<td style="text-align:right;">
+
+0.66
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+### BC Percentile Confidence Interval
+
+``` r
 # to correct with bias, we need the median bias
 
 p_star <- sum(theta_boot >= theta) / length(theta_boot)
@@ -214,7 +743,58 @@ quantile(theta_boot, c(x_alpha(.025),
   t() %>% 
   kable(.,
         col.names = c('2.5%', '97.5%'),
-        format = 'latex',
+        format = 'html',
         digits = 2,
         align = 'rr',
         caption = 'Bootstrapped CIs Using BC Percentile Method')
+```
+
+<table>
+
+<caption>
+
+Bootstrapped CIs Using BC Percentile Method
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:right;">
+
+2.5%
+
+</th>
+
+<th style="text-align:right;">
+
+97.5%
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:right;">
+
+\-0.18
+
+</td>
+
+<td style="text-align:right;">
+
+0.67
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
