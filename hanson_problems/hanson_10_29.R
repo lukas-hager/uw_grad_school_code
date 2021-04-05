@@ -177,8 +177,8 @@ get_theta_var <- function(vcov_mat){
 
 data.table('Theta' = theta,
            'SE Asymptotic' = get_theta_var(V_mrw),
-           'SE Jackknife' = get_theta_var(var_boot),
-           'SE Bootstrap' = get_theta_var(var_jk)) %>% 
+           'SE Jackknife' = get_theta_var(var_jk),
+           'SE Bootstrap' = get_theta_var(var_boot)) %>% 
   kable(.,
         format = 'latex',
         digits = 2,
