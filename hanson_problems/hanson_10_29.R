@@ -199,7 +199,7 @@ quantile(theta_boot, c(.025, .975)) %>%
         digits = 2,
         align = 'rr',
         caption = 'Bootstrapped CIs Using Percentile Method')
-a
+
 # to correct with bias, we need the median bias
 
 p_star <- sum(theta_boot >= theta) / length(theta_boot)
