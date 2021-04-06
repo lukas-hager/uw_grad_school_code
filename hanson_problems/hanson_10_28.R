@@ -152,6 +152,10 @@ p_emd <- round(1 - pchisq(j, df = q), 2)
 emd_text <- 'The p-value of the Wald test is ${p_emd}'
 str_interp(emd_text)
 
+#########################################################
+# Exercise 10.28
+#########################################################
+
 # construct jackknife estimator for ols
 
 data_id <- data_reg %>% 
