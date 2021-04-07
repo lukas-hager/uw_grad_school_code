@@ -673,7 +673,7 @@ SE Bootstrap
 
 <td style="text-align:right;">
 
-1.1105
+1.0301
 
 </td>
 
@@ -717,13 +717,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <th style="text-align:right;">
 
-0.5978832%
+0.6918195%
 
 </th>
 
 <th style="text-align:right;">
 
-92.02176%
+92.7641%
 
 </th>
 
@@ -737,13 +737,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <td style="text-align:right;">
 
-1.6553
+1.5814
 
 </td>
 
 <td style="text-align:right;">
 
-4.525
+4.6295
 
 </td>
 
