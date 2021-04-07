@@ -244,7 +244,7 @@ exp\_2
 
 </table>
 
-### Calculate Theta
+### Calculate Theta and SE
 
 ``` r
 # return to educ = exp(beta_1)
@@ -269,12 +269,71 @@ V_theta <- t(R) %*% V_HC1 %*% R %>%
 
 se_theta <- sqrt(V_theta)
 
-# constructing 90% interval uses that sqrt(n) (theta_hat - theta)
-# is distributed as N(0, se_theta)
+# constructing 90% interval 
 
-ci_low <- qnorm(.05, mean = theta_hat, sd = se_theta)
-ci_high <- qnorm(.95, mean = theta_hat, sd = se_theta)
+c('5%' = theta_hat - qnorm(.95) * se_theta, 
+  '95%' = theta_hat + qnorm(.9) * se_theta) %>% 
+  t() %>% 
+  kable(.,
+        format = 'html',
+        digits = 4,
+        align = 'rr',
+        caption = '90% Confidence Interval')
+```
 
+<table>
+
+<caption>
+
+90% Confidence Interval
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:right;">
+
+5%
+
+</th>
+
+<th style="text-align:right;">
+
+95%
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:right;">
+
+3.0952
+
+</td>
+
+<td style="text-align:right;">
+
+3.759
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+### Calculate Regression SE
+
+``` r
 # get the fitted value for educ = 12 and exp = 20
 
 educ_ex <- 12
@@ -614,7 +673,7 @@ SE Bootstrap
 
 <td style="text-align:right;">
 
-1.0678
+1.166
 
 </td>
 
@@ -658,13 +717,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <th style="text-align:right;">
 
-1.094236%
+0.571883%
 
 </th>
 
 <th style="text-align:right;">
 
-94.81914%
+91.7871%
 
 </th>
 
@@ -678,13 +737,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <td style="text-align:right;">
 
-1.7582
+1.495
 
 </td>
 
 <td style="text-align:right;">
 
-4.6508
+4.4447
 
 </td>
 

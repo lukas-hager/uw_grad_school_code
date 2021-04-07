@@ -71,11 +71,16 @@ V_theta <- t(R) %*% V_HC1 %*% R %>%
 
 se_theta <- sqrt(V_theta)
 
-# constructing 90% interval uses that sqrt(n) (theta_hat - theta)
-# is distributed as N(0, se_theta)
+# constructing 90% interval 
 
-ci_low <- qnorm(.05, mean = theta_hat, sd = se_theta)
-ci_high <- qnorm(.95, mean = theta_hat, sd = se_theta)
+c('5%' = theta_hat - qnorm(.95) * se_theta, 
+  '95%' = theta_hat + qnorm(.9) * se_theta) %>% 
+  t() %>% 
+  kable(.,
+        format = 'latex',
+        digits = 2,
+        align = 'rr',
+        caption = '90% Confidence Interval')
 
 # get the fitted value for educ = 12 and exp = 20
 
