@@ -673,7 +673,7 @@ SE Bootstrap
 
 <td style="text-align:right;">
 
-1.0301
+3.5392
 
 </td>
 
@@ -686,7 +686,7 @@ SE Bootstrap
 ### CI using BC Percentile method
 
 ``` r
-p_star <- mean(theta_boot >= mean(theta_boot))
+p_star <- mean(theta_boot <= theta_hat)
 z_0 <- qnorm(p_star)
 
 x_alpha <- function(alpha){
@@ -717,13 +717,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <th style="text-align:right;">
 
-0.6918195%
+24.45578%
 
 </th>
 
 <th style="text-align:right;">
 
-92.7641%
+99.93772%
 
 </th>
 
@@ -737,13 +737,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <td style="text-align:right;">
 
-1.5814
+2.4323
 
 </td>
 
 <td style="text-align:right;">
 
-4.6295
+70.7843
 
 </td>
 
