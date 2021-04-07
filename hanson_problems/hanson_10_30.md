@@ -31,7 +31,7 @@ data_cps <- 'https://www.ssc.wisc.edu/~bhansen/econometrics/cps09mar.xlsx' %>%
 
 data_reg <- data_cps %>% 
   filter(female == 0, race == 1, hisp == 1) %>% 
-  mutate(log_wage = log(earnings),
+  mutate(log_wage = log(earnings / (hours * week)),
          exp = age - education - 6,
          exp_2 = exp^2 / 100)
 
@@ -114,7 +114,7 @@ p.value
 
 <td style="text-align:right;">
 
-8.81
+1.19
 
 </td>
 
@@ -126,7 +126,7 @@ p.value
 
 <td style="text-align:right;">
 
-184.42
+25.71
 
 </td>
 
@@ -148,7 +148,7 @@ education
 
 <td style="text-align:right;">
 
-0.10
+0.09
 
 </td>
 
@@ -160,7 +160,7 @@ education
 
 <td style="text-align:right;">
 
-31.60
+31.01
 
 </td>
 
@@ -194,7 +194,7 @@ exp
 
 <td style="text-align:right;">
 
-13.87
+13.68
 
 </td>
 
@@ -228,7 +228,7 @@ exp\_2
 
 <td style="text-align:right;">
 
-\-8.96
+\-8.76
 
 </td>
 
@@ -336,13 +336,13 @@ c('2.5%' = reg_value - qnorm(.975) * reg_se,
 
 <td style="text-align:right;">
 
-10.48
+2.77
 
 </td>
 
 <td style="text-align:right;">
 
-10.53
+2.82
 
 </td>
 
@@ -413,13 +413,13 @@ c('2.5%' = f_val - qnorm(.9) * s_2x,
 
 <td style="text-align:right;">
 
-9.76
+2.06
 
 </td>
 
 <td style="text-align:right;">
 
-11.27
+3.53
 
 </td>
 
@@ -474,13 +474,13 @@ c('2.5%' = exp(f_val - qnorm(.9) * s_2x),
 
 <td style="text-align:right;">
 
-17300.83
+7.86
 
 </td>
 
 <td style="text-align:right;">
 
-78303.46
+34.23
 
 </td>
 
@@ -596,7 +596,7 @@ SE Bootstrap
 
 <td style="text-align:left;">
 
-3.51
+3.47
 
 </td>
 
@@ -608,13 +608,13 @@ SE Bootstrap
 
 <td style="text-align:right;">
 
-0.89
+0.82
 
 </td>
 
 <td style="text-align:right;">
 
-1.5
+0.98
 
 </td>
 
@@ -658,13 +658,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <th style="text-align:right;">
 
-0.6918195%
+0.9298223%
 
 </th>
 
 <th style="text-align:right;">
 
-92.7641%
+94.13731%
 
 </th>
 
@@ -678,13 +678,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <td style="text-align:right;">
 
-1.74
+1.62
 
 </td>
 
 <td style="text-align:right;">
 
-5
+4.75
 
 </td>
 

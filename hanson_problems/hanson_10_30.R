@@ -25,7 +25,7 @@ data_cps <- 'https://www.ssc.wisc.edu/~bhansen/econometrics/cps09mar.xlsx' %>%
 
 data_reg <- data_cps %>% 
   filter(female == 0, race == 1, hisp == 1) %>% 
-  mutate(log_wage = log(earnings),
+  mutate(log_wage = log(earnings / (hours * week)),
          exp = age - education - 6,
          exp_2 = exp^2 / 100)
 

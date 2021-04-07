@@ -13,6 +13,7 @@ library(data.table) # probably not important for this
 library(broom) # create regression tables
 library(knitr) # create kables for latex
 library(sandwich) # make nice HC covariance matrices
+library(lmtest) # for robust coefficient testing
 library(MASS) # some statistics package
 library(tidyverse) # important for data manipulation, includes dplyr
 ```
