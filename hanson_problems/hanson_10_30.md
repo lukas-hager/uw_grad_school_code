@@ -428,8 +428,8 @@ s_2 <- mean(basic_reg$residuals^2)
 s_2x <- sqrt(s_2 + t(f_vector) %*% V_HC1 %*% f_vector) %>% 
   as.vector()
 
-c('2.5%' = f_val - qnorm(.9) * s_2x, 
-  '97.5%' = f_val + qnorm(.9) * s_2x) %>% 
+c('10%' = f_val - qnorm(.9) * s_2x, 
+  '90%' = f_val + qnorm(.9) * s_2x) %>% 
   t() %>% 
   kable(.,
         format = 'html',
@@ -452,13 +452,13 @@ c('2.5%' = f_val - qnorm(.9) * s_2x,
 
 <th style="text-align:right;">
 
-2.5%
+10%
 
 </th>
 
 <th style="text-align:right;">
 
-97.5%
+90%
 
 </th>
 
@@ -489,8 +489,8 @@ c('2.5%' = f_val - qnorm(.9) * s_2x,
 </table>
 
 ``` r
-c('2.5%' = exp(f_val - qnorm(.9) * s_2x), 
-  '97.5%' = exp(f_val + qnorm(.9) * s_2x)) %>% 
+c('10%' = exp(f_val - qnorm(.9) * s_2x), 
+  '80%' = exp(f_val + qnorm(.9) * s_2x)) %>% 
   t() %>% 
   kable(.,
         format = 'html',
@@ -513,13 +513,13 @@ c('2.5%' = exp(f_val - qnorm(.9) * s_2x),
 
 <th style="text-align:right;">
 
-2.5%
+10%
 
 </th>
 
 <th style="text-align:right;">
 
-97.5%
+80%
 
 </th>
 
@@ -673,7 +673,7 @@ SE Bootstrap
 
 <td style="text-align:right;">
 
-1.166
+1.1164
 
 </td>
 
@@ -717,13 +717,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <th style="text-align:right;">
 
-0.571883%
+0.5468367%
 
 </th>
 
 <th style="text-align:right;">
 
-91.7871%
+91.54675%
 
 </th>
 
@@ -737,13 +737,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <td style="text-align:right;">
 
-1.495
+1.5876
 
 </td>
 
 <td style="text-align:right;">
 
-4.4447
+4.4341
 
 </td>
 

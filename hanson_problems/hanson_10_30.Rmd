@@ -144,8 +144,8 @@ s_2 <- mean(basic_reg$residuals^2)
 s_2x <- sqrt(s_2 + t(f_vector) %*% V_HC1 %*% f_vector) %>% 
   as.vector()
 
-c('2.5%' = f_val - qnorm(.9) * s_2x, 
-  '97.5%' = f_val + qnorm(.9) * s_2x) %>% 
+c('10%' = f_val - qnorm(.9) * s_2x, 
+  '90%' = f_val + qnorm(.9) * s_2x) %>% 
   t() %>% 
   kable(.,
         format = 'html',
@@ -153,8 +153,8 @@ c('2.5%' = f_val - qnorm(.9) * s_2x,
         align = 'rr',
         caption = '80% Forecast Interval for Log(Wage)')
 
-c('2.5%' = exp(f_val - qnorm(.9) * s_2x), 
-  '97.5%' = exp(f_val + qnorm(.9) * s_2x)) %>% 
+c('10%' = exp(f_val - qnorm(.9) * s_2x), 
+  '80%' = exp(f_val + qnorm(.9) * s_2x)) %>% 
   t() %>% 
   kable(.,
         format = 'html',
