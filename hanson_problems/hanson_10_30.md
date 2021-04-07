@@ -580,12 +580,12 @@ theta_hat_s <- b1_s / (b2_s + b3_s / 5)
 
 # define the R vector for the nonlinear transformation
 
-R <- c(0, 
-       1/ (b2 + b3 / 5), 
-       -b1 / (b2 + b3 /5)^2, 
-       -(1/5) * b1 / (b2 + b3 / 5)^2)
+R_s <- c(0, 
+         1/ (b2_s + b3_s / 5), 
+         -b1_s / (b2_s + b3_s /5)^2, 
+         -(1/5) * b1_s / (b2_s + b3_s / 5)^2)
 
-V_theta_s <- t(R) %*% V_HC1_small %*% R %>% 
+V_theta_s <- t(R_s) %*% V_HC1_small %*% R_s %>% 
   as.vector()
 
 se_theta_s <- sqrt(V_theta_s)
@@ -690,7 +690,7 @@ SE Bootstrap
 
 <td style="text-align:right;">
 
-0.9924
+0.7604
 
 </td>
 
@@ -702,7 +702,7 @@ SE Bootstrap
 
 <td style="text-align:right;">
 
-1.3078
+0.9565
 
 </td>
 
@@ -746,13 +746,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <th style="text-align:right;">
 
-24.26386%
+22.40925%
 
 </th>
 
 <th style="text-align:right;">
 
-99.93637%
+99.92152%
 
 </th>
 
@@ -766,13 +766,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <td style="text-align:right;">
 
-2.47
+2.4136
 
 </td>
 
 <td style="text-align:right;">
 
-22.014
+9.8141
 
 </td>
 
