@@ -89,7 +89,7 @@ se_theta <- sqrt(V_theta)
 # constructing 90% interval 
 
 c('5%' = theta_hat - qnorm(.95) * se_theta, 
-  '95%' = theta_hat + qnorm(.9) * se_theta) %>% 
+  '95%' = theta_hat + qnorm(.95) * se_theta) %>% 
   t() %>% 
   kable(.,
         format = 'html',

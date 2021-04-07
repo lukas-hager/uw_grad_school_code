@@ -272,7 +272,7 @@ se_theta <- sqrt(V_theta)
 # constructing 90% interval 
 
 c('5%' = theta_hat - qnorm(.95) * se_theta, 
-  '95%' = theta_hat + qnorm(.9) * se_theta) %>% 
+  '95%' = theta_hat + qnorm(.95) * se_theta) %>% 
   t() %>% 
   kable(.,
         format = 'html',
@@ -321,7 +321,7 @@ c('5%' = theta_hat - qnorm(.95) * se_theta,
 
 <td style="text-align:right;">
 
-3.759
+3.8415
 
 </td>
 
@@ -673,7 +673,7 @@ SE Bootstrap
 
 <td style="text-align:right;">
 
-1.1164
+1.1105
 
 </td>
 
@@ -717,13 +717,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <th style="text-align:right;">
 
-0.5468367%
+0.5978832%
 
 </th>
 
 <th style="text-align:right;">
 
-91.54675%
+92.02176%
 
 </th>
 
@@ -737,13 +737,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <td style="text-align:right;">
 
-1.5876
+1.6553
 
 </td>
 
 <td style="text-align:right;">
 
-4.4341
+4.525
 
 </td>
 
