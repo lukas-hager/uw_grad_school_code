@@ -56,7 +56,7 @@ coeftest(basic_reg,
   tidy() %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'lrrrr',
         caption = 'CPS Regression with Robust SEs')
 ```
@@ -114,7 +114,7 @@ c('2.5%' = reg_value - qnorm(.975) * reg_se,
   t() %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'rr',
         caption = '95% Confidence Interval')
 ```
@@ -141,7 +141,7 @@ c('2.5%' = f_val - qnorm(.9) * s_2x,
   t() %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'rr',
         caption = '80% Forecast Interval for Log(Wage)')
 
@@ -150,7 +150,7 @@ c('2.5%' = exp(f_val - qnorm(.9) * s_2x),
   t() %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'rr',
         caption = '80% Forecast Interval for Wage')
 ```
@@ -210,7 +210,7 @@ data.table('Theta' = theta_hat,
            'SE Bootstrap' = se_boot) %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'lrrr',
         caption = 'Theta and SEs')
 ```
@@ -230,7 +230,7 @@ quantile(theta_boot, c(x_alpha(.025),
   t() %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'rr',
         caption = 'Bootstrapped CIs Using BC Percentile Method')
 ```

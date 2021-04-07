@@ -60,7 +60,7 @@ data.table('term' = mrw_basic_reg_summary$term,
            'std.error' = se_mrw) %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'lrr',
         caption = 'Estimates of Solow Growth Model')
 ```
@@ -111,13 +111,13 @@ std.error
 
 <td style="text-align:right;">
 
-3.02
+3.0215
 
 </td>
 
 <td style="text-align:right;">
 
-0.74
+0.7373
 
 </td>
 
@@ -133,13 +133,13 @@ log\_gdp
 
 <td style="text-align:right;">
 
-\-0.29
+\-0.2884
 
 </td>
 
 <td style="text-align:right;">
 
-0.05
+0.0543
 
 </td>
 
@@ -155,13 +155,13 @@ log\_i
 
 <td style="text-align:right;">
 
-0.52
+0.5237
 
 </td>
 
 <td style="text-align:right;">
 
-0.11
+0.1073
 
 </td>
 
@@ -177,13 +177,13 @@ log\_vars
 
 <td style="text-align:right;">
 
-\-0.51
+\-0.5057
 
 </td>
 
 <td style="text-align:right;">
 
-0.24
+0.2360
 
 </td>
 
@@ -199,13 +199,13 @@ log\_school
 
 <td style="text-align:right;">
 
-0.23
+0.2311
 
 </td>
 
 <td style="text-align:right;">
 
-0.07
+0.0664
 
 </td>
 
@@ -333,7 +333,7 @@ data.table('Term' = mrw_basic_reg_summary$term,
            'SE Bootstrap' = se_boot) %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'lrrrr',
         caption = 'Estimates of Solow Growth Model')
 ```
@@ -396,25 +396,25 @@ SE Bootstrap
 
 <td style="text-align:right;">
 
-3.02
+3.0215
 
 </td>
 
 <td style="text-align:right;">
 
-0.74
+0.7373
 
 </td>
 
 <td style="text-align:right;">
 
-0.76
+0.7563
 
 </td>
 
 <td style="text-align:right;">
 
-0.71
+0.7141
 
 </td>
 
@@ -430,25 +430,25 @@ log\_gdp
 
 <td style="text-align:right;">
 
-\-0.29
+\-0.2884
 
 </td>
 
 <td style="text-align:right;">
 
-0.05
+0.0543
 
 </td>
 
 <td style="text-align:right;">
 
-0.06
+0.0569
 
 </td>
 
 <td style="text-align:right;">
 
-0.05
+0.0492
 
 </td>
 
@@ -464,25 +464,25 @@ log\_i
 
 <td style="text-align:right;">
 
-0.52
+0.5237
 
 </td>
 
 <td style="text-align:right;">
 
-0.11
+0.1073
 
 </td>
 
 <td style="text-align:right;">
 
-0.11
+0.1116
 
 </td>
 
 <td style="text-align:right;">
 
-0.11
+0.1063
 
 </td>
 
@@ -498,25 +498,25 @@ log\_vars
 
 <td style="text-align:right;">
 
-\-0.51
+\-0.5057
 
 </td>
 
 <td style="text-align:right;">
 
-0.24
+0.2360
 
 </td>
 
 <td style="text-align:right;">
 
-0.24
+0.2447
 
 </td>
 
 <td style="text-align:right;">
 
-0.22
+0.2202
 
 </td>
 
@@ -532,25 +532,25 @@ log\_school
 
 <td style="text-align:right;">
 
-0.23
+0.2311
 
 </td>
 
 <td style="text-align:right;">
 
-0.07
+0.0664
 
 </td>
 
 <td style="text-align:right;">
 
-0.07
+0.0690
 
 </td>
 
 <td style="text-align:right;">
 
-0.07
+0.0677
 
 </td>
 
@@ -580,7 +580,7 @@ data.table('Theta' = theta,
            'SE Bootstrap' = get_theta_var(var_boot)) %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'lrrr',
         caption = 'Estimate of Theta in Solow Growth Model')
 ```
@@ -631,25 +631,25 @@ SE Bootstrap
 
 <td style="text-align:left;">
 
-0.25
+0.2492
 
 </td>
 
 <td style="text-align:right;">
 
-0.27
+0.2725
 
 </td>
 
 <td style="text-align:right;">
 
-0.28
+0.2809
 
 </td>
 
 <td style="text-align:right;">
 
-0.26
+0.2556
 
 </td>
 
@@ -672,7 +672,7 @@ quantile(theta_boot, c(.025, .975)) %>%
   t() %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'rr',
         caption = 'Bootstrapped CIs Using Percentile Method')
 ```
@@ -711,13 +711,13 @@ Bootstrapped CIs Using Percentile Method
 
 <td style="text-align:right;">
 
-\-0.23
+\-0.2304
 
 </td>
 
 <td style="text-align:right;">
 
-0.66
+0.6604
 
 </td>
 
@@ -745,7 +745,7 @@ quantile(theta_boot, c(x_alpha(.025),
   kable(.,
         col.names = c('2.5%', '97.5%'),
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'rr',
         caption = 'Bootstrapped CIs Using BC Percentile Method')
 ```
@@ -784,13 +784,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <td style="text-align:right;">
 
-\-0.18
+\-0.1835
 
 </td>
 
 <td style="text-align:right;">
 
-0.67
+0.6741
 
 </td>
 

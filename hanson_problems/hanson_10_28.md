@@ -56,7 +56,7 @@ basic_reg_results <- basic_reg %>%
 basic_reg_results %>%
   kable(., 
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'lrrrr',
         caption = 'Ordinary Least Squares')
 ```
@@ -119,25 +119,25 @@ p.value
 
 <td style="text-align:right;">
 
-\-3.53
+\-3.5265
 
 </td>
 
 <td style="text-align:right;">
 
-1.72
+1.7186
 
 </td>
 
 <td style="text-align:right;">
 
-\-2.05
+\-2.0520
 
 </td>
 
 <td style="text-align:right;">
 
-0.04
+0.0420
 
 </td>
 
@@ -153,25 +153,25 @@ output\_log
 
 <td style="text-align:right;">
 
-0.72
+0.7204
 
 </td>
 
 <td style="text-align:right;">
 
-0.03
+0.0326
 
 </td>
 
 <td style="text-align:right;">
 
-22.10
+22.0997
 
 </td>
 
 <td style="text-align:right;">
 
-0.00
+0.0000
 
 </td>
 
@@ -187,25 +187,25 @@ plabor\_log
 
 <td style="text-align:right;">
 
-0.44
+0.4363
 
 </td>
 
 <td style="text-align:right;">
 
-0.25
+0.2456
 
 </td>
 
 <td style="text-align:right;">
 
-1.78
+1.7764
 
 </td>
 
 <td style="text-align:right;">
 
-0.08
+0.0778
 
 </td>
 
@@ -221,25 +221,25 @@ pcapital\_log
 
 <td style="text-align:right;">
 
-\-0.22
+\-0.2199
 
 </td>
 
 <td style="text-align:right;">
 
-0.32
+0.3238
 
 </td>
 
 <td style="text-align:right;">
 
-\-0.68
+\-0.6791
 
 </td>
 
 <td style="text-align:right;">
 
-0.50
+0.4982
 
 </td>
 
@@ -255,25 +255,25 @@ pfuel\_log
 
 <td style="text-align:right;">
 
-0.43
+0.4265
 
 </td>
 
 <td style="text-align:right;">
 
-0.08
+0.0755
 
 </td>
 
 <td style="text-align:right;">
 
-5.65
+5.6505
 
 </td>
 
 <td style="text-align:right;">
 
-0.00
+0.0000
 
 </td>
 
@@ -339,7 +339,7 @@ data.table('term' = basic_reg_results$term,
            'std.error' = se_cls) %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'lrr',
         caption = 'Constrained Least Squares')
 ```
@@ -390,13 +390,13 @@ std.error
 
 <td style="text-align:right;">
 
-\-4.69
+\-4.6908
 
 </td>
 
 <td style="text-align:right;">
 
-0.81
+0.8149
 
 </td>
 
@@ -412,13 +412,13 @@ output\_log
 
 <td style="text-align:right;">
 
-0.72
+0.7207
 
 </td>
 
 <td style="text-align:right;">
 
-0.03
+0.0325
 
 </td>
 
@@ -434,13 +434,13 @@ plabor\_log
 
 <td style="text-align:right;">
 
-0.59
+0.5929
 
 </td>
 
 <td style="text-align:right;">
 
-0.17
+0.1691
 
 </td>
 
@@ -456,13 +456,13 @@ pcapital\_log
 
 <td style="text-align:right;">
 
-\-0.01
+\-0.0074
 
 </td>
 
 <td style="text-align:right;">
 
-0.16
+0.1558
 
 </td>
 
@@ -478,13 +478,13 @@ pfuel\_log
 
 <td style="text-align:right;">
 
-0.41
+0.4145
 
 </td>
 
 <td style="text-align:right;">
 
-0.07
+0.0729
 
 </td>
 
@@ -518,7 +518,7 @@ data.table('term' = basic_reg_results$term,
            'std.error' = se_emd) %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'lrr',
         caption = 'Minimum Distance Estimation')
 ```
@@ -569,13 +569,13 @@ std.error
 
 <td style="text-align:right;">
 
-\-4.74
+\-4.7446
 
 </td>
 
 <td style="text-align:right;">
 
-0.82
+0.8154
 
 </td>
 
@@ -591,13 +591,13 @@ output\_log
 
 <td style="text-align:right;">
 
-0.72
+0.7202
 
 </td>
 
 <td style="text-align:right;">
 
-0.03
+0.0323
 
 </td>
 
@@ -613,13 +613,13 @@ plabor\_log
 
 <td style="text-align:right;">
 
-0.58
+0.5805
 
 </td>
 
 <td style="text-align:right;">
 
-0.17
+0.1695
 
 </td>
 
@@ -635,13 +635,13 @@ pcapital\_log
 
 <td style="text-align:right;">
 
-0.01
+0.0092
 
 </td>
 
 <td style="text-align:right;">
 
-0.16
+0.1552
 
 </td>
 
@@ -657,13 +657,13 @@ pfuel\_log
 
 <td style="text-align:right;">
 
-0.41
+0.4103
 
 </td>
 
 <td style="text-align:right;">
 
-0.07
+0.0724
 
 </td>
 
@@ -749,7 +749,7 @@ data.table('term' = basic_reg_results$term,
            'std.error' = se_jk) %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'lrr',
         caption = 'OLS with Jackknife SEs')
 ```
@@ -800,13 +800,13 @@ std.error
 
 <td style="text-align:right;">
 
-\-3.53
+\-3.5265
 
 </td>
 
 <td style="text-align:right;">
 
-1.79
+1.7880
 
 </td>
 
@@ -822,13 +822,13 @@ output\_log
 
 <td style="text-align:right;">
 
-0.72
+0.7204
 
 </td>
 
 <td style="text-align:right;">
 
-0.03
+0.0339
 
 </td>
 
@@ -844,13 +844,13 @@ plabor\_log
 
 <td style="text-align:right;">
 
-0.44
+0.4363
 
 </td>
 
 <td style="text-align:right;">
 
-0.25
+0.2532
 
 </td>
 
@@ -866,13 +866,13 @@ pcapital\_log
 
 <td style="text-align:right;">
 
-\-0.22
+\-0.2199
 
 </td>
 
 <td style="text-align:right;">
 
-0.34
+0.3363
 
 </td>
 
@@ -888,13 +888,13 @@ pfuel\_log
 
 <td style="text-align:right;">
 
-0.43
+0.4265
 
 </td>
 
 <td style="text-align:right;">
 
-0.08
+0.0778
 
 </td>
 
@@ -949,7 +949,7 @@ data.table('Term' = basic_reg_results$term,
            'SE Bootstrap' = se_boot) %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'lrr',
         caption = 'OLS with Bootstrap SEs')
 ```
@@ -1012,25 +1012,25 @@ SE Bootstrap
 
 <td style="text-align:right;">
 
-\-3.53
+\-3.5265
 
 </td>
 
 <td style="text-align:right;">
 
-1.72
+1.7186
 
 </td>
 
 <td style="text-align:left;">
 
-1.79
+1.7880
 
 </td>
 
 <td style="text-align:right;">
 
-1.74
+1.7448
 
 </td>
 
@@ -1046,25 +1046,25 @@ output\_log
 
 <td style="text-align:right;">
 
-0.72
+0.7204
 
 </td>
 
 <td style="text-align:right;">
 
-0.03
+0.0326
 
 </td>
 
 <td style="text-align:left;">
 
-0.03
+0.0339
 
 </td>
 
 <td style="text-align:right;">
 
-0.03
+0.0317
 
 </td>
 
@@ -1080,25 +1080,25 @@ plabor\_log
 
 <td style="text-align:right;">
 
-0.44
+0.4363
 
 </td>
 
 <td style="text-align:right;">
 
-0.25
+0.2456
 
 </td>
 
 <td style="text-align:left;">
 
-0.25
+0.2532
 
 </td>
 
 <td style="text-align:right;">
 
-0.22
+0.2211
 
 </td>
 
@@ -1114,25 +1114,25 @@ pcapital\_log
 
 <td style="text-align:right;">
 
-\-0.22
+\-0.2199
 
 </td>
 
 <td style="text-align:right;">
 
-0.32
+0.3238
 
 </td>
 
 <td style="text-align:left;">
 
-0.34
+0.3363
 
 </td>
 
 <td style="text-align:right;">
 
-0.33
+0.3255
 
 </td>
 
@@ -1148,25 +1148,25 @@ pfuel\_log
 
 <td style="text-align:right;">
 
-0.43
+0.4265
 
 </td>
 
 <td style="text-align:right;">
 
-0.08
+0.0755
 
 </td>
 
 <td style="text-align:left;">
 
-0.08
+0.0778
 
 </td>
 
 <td style="text-align:right;">
 
-0.07
+0.0748
 
 </td>
 
@@ -1194,7 +1194,7 @@ data.table('Theta' = theta,
            'SE Bootstrap' = get_theta_var(var_boot)) %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'lrrr',
         caption = 'Estimate of Theta in MRW Model')
 ```
@@ -1245,25 +1245,25 @@ SE Bootstrap
 
 <td style="text-align:left;">
 
-0.64
+0.643
 
 </td>
 
 <td style="text-align:right;">
 
-0.44
+0.4444
 
 </td>
 
 <td style="text-align:right;">
 
-0.46
+0.4627
 
 </td>
 
 <td style="text-align:right;">
 
-0.4
+0.3983
 
 </td>
 
@@ -1284,7 +1284,7 @@ quantile(theta_boot, c(.025, .975)) %>%
   t() %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'rr',
         caption = 'Bootstrapped CIs Using Percentile Method')
 ```
@@ -1323,13 +1323,13 @@ Bootstrapped CIs Using Percentile Method
 
 <td style="text-align:right;">
 
-\-0.07
+\-0.0725
 
 </td>
 
 <td style="text-align:right;">
 
-1.53
+1.5327
 
 </td>
 
@@ -1364,7 +1364,7 @@ quantile(theta_boot, c(x_alpha(.025),
   t() %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'rr',
         caption = 'Bootstrapped CIs Using BC Alpha Method')
 ```
@@ -1403,13 +1403,13 @@ Bootstrapped CIs Using BC Alpha Method
 
 <td style="text-align:right;">
 
-0.02
+0.0231
 
 </td>
 
 <td style="text-align:right;">
 
-1.58
+1.5826
 
 </td>
 

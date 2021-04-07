@@ -51,7 +51,7 @@ data.table('term' = mrw_basic_reg_summary$term,
            'std.error' = se_mrw) %>% 
   kable(.,
         format = 'latex',
-        digits = 2,
+        digits = 4,
         align = 'lrr',
         caption = 'Estimates of Solow Growth Model')
 
@@ -158,7 +158,7 @@ data.table('Term' = mrw_basic_reg_summary$term,
            'SE Bootstrap' = se_boot) %>% 
   kable(.,
         format = 'latex',
-        digits = 2,
+        digits = 4,
         align = 'lrrrr',
         caption = 'Estimates of Solow Growth Model')
 
@@ -181,7 +181,7 @@ data.table('Theta' = theta,
            'SE Bootstrap' = get_theta_var(var_boot)) %>% 
   kable(.,
         format = 'latex',
-        digits = 2,
+        digits = 4,
         align = 'lrrr',
         caption = 'Estimate of Theta in Solow Growth Model')
 
@@ -196,7 +196,7 @@ quantile(theta_boot, c(.025, .975)) %>%
   t() %>% 
   kable(.,
         format = 'latex',
-        digits = 2,
+        digits = 4,
         align = 'rr',
         caption = 'Bootstrapped CIs Using Percentile Method')
 
@@ -215,6 +215,6 @@ quantile(theta_boot, c(x_alpha(.025),
   kable(.,
         col.names = c('2.5%', '97.5%'),
         format = 'latex',
-        digits = 2,
+        digits = 4,
         align = 'rr',
         caption = 'Bootstrapped CIs Using BC Percentile Method')

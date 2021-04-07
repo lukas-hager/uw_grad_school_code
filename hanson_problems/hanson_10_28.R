@@ -47,7 +47,7 @@ basic_reg_results <- basic_reg %>%
 basic_reg_results %>%
   kable(., 
         format = 'latex',
-        digits = 2,
+        digits = 4,
         align = 'lrrrr',
         caption = 'Ordinary Least Squares')
 
@@ -106,7 +106,7 @@ data.table('term' = basic_reg_results$term,
            'std.error' = se_cls) %>% 
   kable(.,
         format = 'latex',
-        digits = 2,
+        digits = 4,
         align = 'lrr',
         caption = 'Constrained Least Squares')
 
@@ -131,7 +131,7 @@ data.table('term' = basic_reg_results$term,
            'std.error' = se_emd) %>% 
   kable(.,
         format = 'latex',
-        digits = 2,
+        digits = 4,
         align = 'lrr',
         caption = 'Minimum Distance Estimation')
 
@@ -200,7 +200,7 @@ data.table('term' = basic_reg_results$term,
            'std.error' = se_jk) %>% 
   kable(.,
         format = 'latex',
-        digits = 2,
+        digits = 4,
         align = 'lrr',
         caption = 'OLS with Jackknife SEs')
 
@@ -248,7 +248,7 @@ data.table('Term' = basic_reg_results$term,
            'SE Bootstrap' = se_boot) %>% 
   kable(.,
         format = 'latex',
-        digits = 2,
+        digits = 4,
         align = 'lrr',
         caption = 'OLS with Bootstrap SEs')
 
@@ -269,7 +269,7 @@ data.table('Theta' = theta,
            'SE Bootstrap' = get_theta_var(var_boot)) %>% 
   kable(.,
         format = 'latex',
-        digits = 2,
+        digits = 4,
         align = 'lrrr',
         caption = 'Estimate of Theta in MRW Model')
 
@@ -283,7 +283,7 @@ quantile(theta_boot, c(.025, .975)) %>%
   t() %>% 
   kable(.,
         format = 'latex',
-        digits = 2,
+        digits = 4,
         align = 'rr',
         caption = 'Bootstrapped CIs Using Percentile Method')
 
@@ -312,6 +312,6 @@ quantile(theta_boot, c(x_alpha(.025),
   kable(.,
         col.names = c('2.5%', '97.5%'),
         format = 'latex',
-        digits = 2,
+        digits = 4,
         align = 'rr',
         caption = 'Bootstrapped CIs Using BC Alpha Method')

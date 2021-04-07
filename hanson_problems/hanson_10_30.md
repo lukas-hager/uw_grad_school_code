@@ -51,7 +51,7 @@ coeftest(basic_reg,
   tidy() %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'lrrrr',
         caption = 'CPS Regression with Robust SEs')
 ```
@@ -114,19 +114,19 @@ p.value
 
 <td style="text-align:right;">
 
-1.19
+1.1852
 
 </td>
 
 <td style="text-align:right;">
 
-0.05
+0.0461
 
 </td>
 
 <td style="text-align:right;">
 
-25.71
+25.7094
 
 </td>
 
@@ -148,19 +148,19 @@ education
 
 <td style="text-align:right;">
 
-0.09
+0.0904
 
 </td>
 
 <td style="text-align:right;">
 
-0.00
+0.0029
 
 </td>
 
 <td style="text-align:right;">
 
-31.01
+31.0133
 
 </td>
 
@@ -182,19 +182,19 @@ exp
 
 <td style="text-align:right;">
 
-0.04
+0.0354
 
 </td>
 
 <td style="text-align:right;">
 
-0.00
+0.0026
 
 </td>
 
 <td style="text-align:right;">
 
-13.68
+13.6844
 
 </td>
 
@@ -216,19 +216,19 @@ exp\_2
 
 <td style="text-align:right;">
 
-\-0.05
+\-0.0465
 
 </td>
 
 <td style="text-align:right;">
 
-0.01
+0.0053
 
 </td>
 
 <td style="text-align:right;">
 
-\-8.76
+\-8.7633
 
 </td>
 
@@ -297,7 +297,7 @@ c('2.5%' = reg_value - qnorm(.975) * reg_se,
   t() %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'rr',
         caption = '95% Confidence Interval')
 ```
@@ -336,13 +336,13 @@ c('2.5%' = reg_value - qnorm(.975) * reg_se,
 
 <td style="text-align:right;">
 
-2.77
+2.7693
 
 </td>
 
 <td style="text-align:right;">
 
-2.82
+2.815
 
 </td>
 
@@ -374,7 +374,7 @@ c('2.5%' = f_val - qnorm(.9) * s_2x,
   t() %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'rr',
         caption = '80% Forecast Interval for Log(Wage)')
 ```
@@ -413,13 +413,13 @@ c('2.5%' = f_val - qnorm(.9) * s_2x,
 
 <td style="text-align:right;">
 
-2.06
+2.0621
 
 </td>
 
 <td style="text-align:right;">
 
-3.53
+3.5332
 
 </td>
 
@@ -435,7 +435,7 @@ c('2.5%' = exp(f_val - qnorm(.9) * s_2x),
   t() %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'rr',
         caption = '80% Forecast Interval for Wage')
 ```
@@ -474,13 +474,13 @@ c('2.5%' = exp(f_val - qnorm(.9) * s_2x),
 
 <td style="text-align:right;">
 
-7.86
+7.8625
 
 </td>
 
 <td style="text-align:right;">
 
-34.23
+34.2343
 
 </td>
 
@@ -545,7 +545,7 @@ data.table('Theta' = theta_hat,
            'SE Bootstrap' = se_boot) %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'lrrr',
         caption = 'Theta and SEs')
 ```
@@ -596,25 +596,25 @@ SE Bootstrap
 
 <td style="text-align:left;">
 
-3.47
+3.4683
 
 </td>
 
 <td style="text-align:right;">
 
-0.23
+0.2268
 
 </td>
 
 <td style="text-align:right;">
 
-0.82
+0.823
 
 </td>
 
 <td style="text-align:right;">
 
-0.98
+1.0678
 
 </td>
 
@@ -639,7 +639,7 @@ quantile(theta_boot, c(x_alpha(.025),
   t() %>% 
   kable(.,
         format = 'html',
-        digits = 2,
+        digits = 4,
         align = 'rr',
         caption = 'Bootstrapped CIs Using BC Percentile Method')
 ```
@@ -658,13 +658,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <th style="text-align:right;">
 
-0.9298223%
+1.094236%
 
 </th>
 
 <th style="text-align:right;">
 
-94.13731%
+94.81914%
 
 </th>
 
@@ -678,13 +678,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <td style="text-align:right;">
 
-1.62
+1.7582
 
 </td>
 
 <td style="text-align:right;">
 
-4.75
+4.6508
 
 </td>
 
