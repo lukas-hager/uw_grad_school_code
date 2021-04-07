@@ -561,6 +561,35 @@ data_reg_2 <- data_reg %>%
 
 n <- nrow(data_reg_2)
 
+# run regression with robust SEs
+small_reg <- lm(log_wage ~ education + exp + exp_2,
+                data = data_reg_2)
+
+small_reg_summary <- small_reg %>% 
+  tidy() %>% 
+  data.table()
+
+V_HC1_small <- vcovHC(small_reg, 
+                      type = 'HC1')
+
+b1_s <- small_reg_summary[term == 'education']$estimate
+b2_s <- small_reg_summary[term == 'exp']$estimate
+b3_s <- small_reg_summary[term == 'exp_2']$estimate
+
+theta_hat_s <- b1_s / (b2_s + b3_s / 5)
+
+# define the R vector for the nonlinear transformation
+
+R <- c(0, 
+       1/ (b2 + b3 / 5), 
+       -b1 / (b2 + b3 /5)^2, 
+       -(1/5) * b1 / (b2 + b3 / 5)^2)
+
+V_theta_s <- t(R) %*% V_HC1_small %*% R %>% 
+  as.vector()
+
+se_theta_s <- sqrt(V_theta_s)
+
 theta_jk <- map_dbl(c(1:n), function(x){
   reg_jk <- lm(log_wage ~ education + exp + exp_2,
                data = data_reg_2 %>% 
@@ -598,8 +627,8 @@ theta_boot <- map_dbl(c(1:B), function(x){
 var_boot <- (1/(B-1)) * sum((theta_boot - mean(theta_boot))^2)
 se_boot <- sqrt(var_boot)
 
-data.table('Theta' = theta_hat,
-           'SE Asymptotic' = se_theta,
+data.table('Theta' = theta_hat_s,
+           'SE Asymptotic' = se_theta_s,
            'SE Jackknife' = se_jk,
            'SE Bootstrap' = se_boot) %>% 
   kable(.,
@@ -655,13 +684,13 @@ SE Bootstrap
 
 <td style="text-align:left;">
 
-3.4683
+2.8993
 
 </td>
 
 <td style="text-align:right;">
 
-0.2268
+0.9924
 
 </td>
 
@@ -673,7 +702,7 @@ SE Bootstrap
 
 <td style="text-align:right;">
 
-3.5392
+1.3078
 
 </td>
 
@@ -717,13 +746,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <th style="text-align:right;">
 
-24.45578%
+24.26386%
 
 </th>
 
 <th style="text-align:right;">
 
-99.93772%
+99.93637%
 
 </th>
 
@@ -737,13 +766,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <td style="text-align:right;">
 
-2.4323
+2.47
 
 </td>
 
 <td style="text-align:right;">
 
-70.7843
+22.014
 
 </td>
 
