@@ -1,24 +1,35 @@
+---
+title: "Hanson Problem 10.31"
+output: rmarkdown::github_document
+---
+
+## Clear Environment and Import Packages
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r import, results=FALSE, message=FALSE}
 rm(list = ls())
 
 gc()
 gc()
 
-library(data.table)
-library(broom)
-library(knitr)
-library(sandwich)
-library(lmtest)
-library(scales)
-library(openxlsx)
-library(MASS)
-library(tidyverse)
+library(data.table) # probably not important for this
+library(broom) # create regression tables
+library(knitr) # create kables for latex
+library(sandwich) # make nice HC covariance matrices
+library(lmtest) # for robust coefficient testing
+library(openxlsx) # get excel files
+library(scales) # for percentage formatting
+library(MASS) # some statistics package
+library(tidyverse) # important for data manipulation, includes dplyr
+```
 
-set.seed(2021)
+## Hanson Problem 4.28
 
-#########################################################
-# Exercise 4.26
-#########################################################
+### Get OLS Estimates with Robust and Clustered SEs
 
+```{r}
 data_ddk <- 'https://www.ssc.wisc.edu/~bhansen/econometrics/DDK2011.xlsx' %>% 
   read.xlsx() %>% 
   mutate_all(list(~ ifelse(. == '.', NA, .)))
@@ -47,15 +58,16 @@ data.table('Term' = basic_reg_results$term,
            'SE Clustered' = sqrt(diag(V_cluster)),
            'SE Difference' = sqrt(diag(V_HC1)) - sqrt(diag(V_cluster))) %>% 
   kable(.,
-        format = 'latex',
+        format = 'html',
         digits = 4,
         align = 'lrrr',
         caption = 'Regression with Robust and Clustered SEs')
+```
 
-#########################################################
-# Exercise 10.31
-#########################################################
-  
+## Hanson Problem 10.31
+
+### Get Bootstraps
+```{r}
 # run bootstrap
 
 boot_data <- data_reg %>% 
@@ -97,11 +109,15 @@ data.table('Term' = basic_reg_results$term,
            'SE Clustered' = sqrt(diag(V_cluster)),
            'SE Bootstrap' = se_boot) %>% 
   kable(.,
-        format = 'latex',
+        format = 'html',
         digits = 4,
         align = 'lrrr',
         caption = 'Regression with Robust, Clustered, and Bootstrapped SEs')
+```
 
+### Estimate BC Alpha Percentiles for Coefficients
+
+```{r}
 # estimate jackknife for BC alpha
 
 beta_jk <- map_dfr(c(1:nrow(data_reg)), function(x){
@@ -154,7 +170,10 @@ cis <- map_dfr(vars, function(var){
 
 cis %>% 
   kable(.,
-        format = 'latex',
+        format = 'html',
         digits = 4,
         align = 'lrrrr',
         caption = 'Bootstrapped CIs Using BC Alpha Method')
+
+```
+
