@@ -72,7 +72,7 @@ We see that `girl` changes the least, and `tracking` changes the most in terms o
 
 ### Changing `tracking` Coefficient
 
-The coefficient on `tracking` decreases when `percentile` is added into the regression. Based on the fact that the coefficient on `tracking` is positive, and the fact that the coefficient decreases, using what we know about Omitted Variable Bias, we can deduce that the correlation between `tracking` and `percentile` is negative. Indeed, this can be verified empirically:
+The coefficient on `tracking` increases when `percentile` is added into the regression. Based on the fact that the coefficient on `tracking` is positive, and the fact that the coefficient increases, using what we know about Omitted Variable Bias, we can deduce that the correlation between `tracking` and `percentile` is negative. Indeed, this can be verified empirically:
 
 ```{r, results='asis'}
 cor_val <- cor(data_reg$percentile, data_reg$tracking)

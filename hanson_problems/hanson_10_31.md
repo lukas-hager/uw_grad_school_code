@@ -366,9 +366,9 @@ terms of percentage deviation.
 
 ### Changing `tracking` Coefficient
 
-The coefficient on `tracking` decreases when `percentile` is added into
+The coefficient on `tracking` increases when `percentile` is added into
 the regression. Based on the fact that the coefficient on `tracking` is
-positive, and the fact that the coefficient decreases, using what we
+positive, and the fact that the coefficient increases, using what we
 know about Omitted Variable Bias, we can deduce that the correlation
 between `tracking` and `percentile` is negative. Indeed, this can be
 verified empirically:
@@ -509,7 +509,7 @@ SE Bootstrap
 
 <td style="text-align:left;">
 
-0.1291
+0.1295
 
 </td>
 
@@ -543,7 +543,7 @@ tracking
 
 <td style="text-align:left;">
 
-0.0742
+0.0753
 
 </td>
 
@@ -577,7 +577,7 @@ agetest
 
 <td style="text-align:left;">
 
-0.0132
+0.0133
 
 </td>
 
@@ -611,7 +611,7 @@ girl
 
 <td style="text-align:left;">
 
-0.0275
+0.0279
 
 </td>
 
@@ -645,7 +645,7 @@ etpteacher
 
 <td style="text-align:left;">
 
-0.0369
+0.0363
 
 </td>
 
@@ -805,25 +805,25 @@ Upper Bound
 
 <td style="text-align:right;">
 
-3.1550%
+3.2750%
 
 </td>
 
 <td style="text-align:right;">
 
-98.0376%
+98.1137%
 
 </td>
 
 <td style="text-align:right;">
 
-\-0.9601
+\-0.9627
 
 </td>
 
 <td style="text-align:right;">
 
-\-0.4609
+\-0.4583
 
 </td>
 
@@ -839,25 +839,25 @@ tracking
 
 <td style="text-align:right;">
 
-2.2952%
+2.5570%
 
 </td>
 
 <td style="text-align:right;">
 
-97.2804%
+97.5559%
 
 </td>
 
 <td style="text-align:right;">
 
-0.0256
+0.0219
 
 </td>
 
 <td style="text-align:right;">
 
-0.3128
+0.3127
 
 </td>
 
@@ -873,25 +873,25 @@ agetest
 
 <td style="text-align:right;">
 
-1.7279%
+1.9325%
 
 </td>
 
 <td style="text-align:right;">
 
-96.4551%
+96.7971%
 
 </td>
 
 <td style="text-align:right;">
 
-\-0.0686
+\-0.0671
 
 </td>
 
 <td style="text-align:right;">
 
-\-0.0157
+\-0.0160
 
 </td>
 
@@ -907,25 +907,25 @@ girl
 
 <td style="text-align:right;">
 
-3.0326%
+2.0776%
 
 </td>
 
 <td style="text-align:right;">
 
-97.9513%
+97.0067%
 
 </td>
 
 <td style="text-align:right;">
 
-0.0296
+0.0253
 
 </td>
 
 <td style="text-align:right;">
 
-0.1385
+0.1346
 
 </td>
 
@@ -941,25 +941,25 @@ etpteacher
 
 <td style="text-align:right;">
 
-2.2008%
+1.8807%
 
 </td>
 
 <td style="text-align:right;">
 
-97.1670%
+96.7170%
 
 </td>
 
 <td style="text-align:right;">
 
-0.1041
+0.1068
 
 </td>
 
 <td style="text-align:right;">
 
-0.2530
+0.2456
 
 </td>
 
@@ -975,13 +975,13 @@ percentile
 
 <td style="text-align:right;">
 
-3.5940%
+2.7214%
 
 </td>
 
 <td style="text-align:right;">
 
-98.2995%
+97.7064%
 
 </td>
 
@@ -993,7 +993,7 @@ percentile
 
 <td style="text-align:right;">
 
-0.0189
+0.0188
 
 </td>
 
