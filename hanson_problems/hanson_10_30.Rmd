@@ -252,6 +252,10 @@ data.table('Theta' = theta_hat_s,
         caption = 'Theta and SEs')
 ```
 
+### Discrepancy between SEs
+
+This is likely due to the small sample size (*n* = 99). In particular, the asymptotics are not a good estimate in small sample, and bootstrap and jackknife estimators will differ in small sample as bootstrap samples are more likely to have outlying values (as we sample with replacement). 
+
 ### CI using BC Percentile method
 
 ```{r}

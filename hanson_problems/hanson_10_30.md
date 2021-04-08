@@ -702,7 +702,7 @@ SE Bootstrap
 
 <td style="text-align:right;">
 
-0.9565
+4.6825
 
 </td>
 
@@ -711,6 +711,14 @@ SE Bootstrap
 </tbody>
 
 </table>
+
+### Discrepancy between SEs
+
+This is likely due to the small sample size (*n* = 99). In particular,
+the asymptotics are not a good estimate in small sample, and bootstrap
+and jackknife estimators will differ in small sample as bootstrap
+samples are more likely to have outlying values (as we sample with
+replacement).
 
 ### CI using BC Percentile method
 
@@ -746,13 +754,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <th style="text-align:right;">
 
-22.40925%
+18.41556%
 
 </th>
 
 <th style="text-align:right;">
 
-99.92152%
+99.87373%
 
 </th>
 
@@ -766,13 +774,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <td style="text-align:right;">
 
-2.4136
+2.3759
 
 </td>
 
 <td style="text-align:right;">
 
-9.8141
+10.545
 
 </td>
 

@@ -47,11 +47,15 @@ V_HC1 <- vcovHC(basic_reg,
 V_cluster <- vcovCL(basic_reg, 
                     cluster = ~ schoolid)
 
+diff <- sqrt(diag(V_HC1)) - sqrt(diag(V_cluster))
+diff_perc <- diff / sqrt(diag(V_HC1))
+
 data.table('Term' = basic_reg_results$term,
            'Estimate' = basic_reg_results$estimate,
            'SE Robust' = sqrt(diag(V_HC1)),
            'SE Clustered' = sqrt(diag(V_cluster)),
-           'SE Difference' = sqrt(diag(V_HC1)) - sqrt(diag(V_cluster))) %>% 
+           'SE Difference' = diff,
+           'SE Difference (%)' = diff_perc) %>% 
   kable(.,
         format = 'html',
         digits = 4,
@@ -101,6 +105,12 @@ SE Difference
 
 </th>
 
+<th style="text-align:right;">
+
+SE Difference (%)
+
+</th>
+
 </tr>
 
 </thead>
@@ -139,6 +149,12 @@ SE Difference
 
 </td>
 
+<td style="text-align:right;">
+
+\-0.6023
+
+</td>
+
 </tr>
 
 <tr>
@@ -170,6 +186,12 @@ tracking
 <td style="text-align:left;">
 
 \-0.0522
+
+</td>
+
+<td style="text-align:right;">
+
+\-2.1713
 
 </td>
 
@@ -207,6 +229,12 @@ agetest
 
 </td>
 
+<td style="text-align:right;">
+
+\-0.5674
+
+</td>
+
 </tr>
 
 <tr>
@@ -238,6 +266,12 @@ girl
 <td style="text-align:left;">
 
 \-0.0044
+
+</td>
+
+<td style="text-align:right;">
+
+\-0.1831
 
 </td>
 
@@ -275,6 +309,12 @@ etpteacher
 
 </td>
 
+<td style="text-align:right;">
+
+\-0.5809
+
+</td>
+
 </tr>
 
 <tr>
@@ -309,11 +349,37 @@ percentile
 
 </td>
 
+<td style="text-align:right;">
+
+\-0.6964
+
+</td>
+
 </tr>
 
 </tbody>
 
 </table>
+
+We see that `girl` changes the least, and `tracking` changes the most in
+terms of percentage deviation.
+
+### Changing `tracking` Coefficient
+
+The coefficient on `tracking` decreases when `percentile` is added into
+the regression. Based on the fact that the coefficient on `tracking` is
+positive, and the fact that the coefficient decreases, using what we
+know about Omitted Variable Bias, we can deduce that the correlation
+between `tracking` and `percentile` is negative. Indeed, this can be
+verified empirically:
+
+``` r
+cor_val <- cor(data_reg$percentile, data_reg$tracking)
+
+cat(str_interp('The correlation between `tracking` and `percentile` is ${round(cor_val, 4)}'))
+```
+
+The correlation between `tracking` and `percentile` is -0.0156
 
 ## Hanson Problem 10.31
 
@@ -443,7 +509,7 @@ SE Bootstrap
 
 <td style="text-align:left;">
 
-0.1274
+0.1291
 
 </td>
 
@@ -477,7 +543,7 @@ tracking
 
 <td style="text-align:left;">
 
-0.0730
+0.0742
 
 </td>
 
@@ -511,7 +577,7 @@ agetest
 
 <td style="text-align:left;">
 
-0.0133
+0.0132
 
 </td>
 
@@ -545,7 +611,7 @@ girl
 
 <td style="text-align:left;">
 
-0.0284
+0.0275
 
 </td>
 
@@ -739,25 +805,25 @@ Upper Bound
 
 <td style="text-align:right;">
 
-2.3618%
+3.1550%
 
 </td>
 
 <td style="text-align:right;">
 
-97.3549%
+98.0376%
 
 </td>
 
 <td style="text-align:right;">
 
-\-0.9952
+\-0.9601
 
 </td>
 
 <td style="text-align:right;">
 
-\-0.4790
+\-0.4609
 
 </td>
 
@@ -773,13 +839,13 @@ tracking
 
 <td style="text-align:right;">
 
-2.4385%
+2.2952%
 
 </td>
 
 <td style="text-align:right;">
 
-97.4372%
+97.2804%
 
 </td>
 
@@ -791,7 +857,7 @@ tracking
 
 <td style="text-align:right;">
 
-0.3152
+0.3128
 
 </td>
 
@@ -807,25 +873,25 @@ agetest
 
 <td style="text-align:right;">
 
-2.7569%
+1.7279%
 
 </td>
 
 <td style="text-align:right;">
 
-97.7370%
+96.4551%
 
 </td>
 
 <td style="text-align:right;">
 
-\-0.0661
+\-0.0686
 
 </td>
 
 <td style="text-align:right;">
 
-\-0.0132
+\-0.0157
 
 </td>
 
@@ -841,25 +907,25 @@ girl
 
 <td style="text-align:right;">
 
-3.0629%
+3.0326%
 
 </td>
 
 <td style="text-align:right;">
 
-97.9726%
+97.9513%
 
 </td>
 
 <td style="text-align:right;">
 
-0.0291
+0.0296
 
 </td>
 
 <td style="text-align:right;">
 
-0.1412
+0.1385
 
 </td>
 
@@ -875,25 +941,25 @@ etpteacher
 
 <td style="text-align:right;">
 
-1.9096%
+2.2008%
 
 </td>
 
 <td style="text-align:right;">
 
-96.7616%
+97.1670%
 
 </td>
 
 <td style="text-align:right;">
 
-0.1058
+0.1041
 
 </td>
 
 <td style="text-align:right;">
 
-0.2487
+0.2530
 
 </td>
 
@@ -909,25 +975,25 @@ percentile
 
 <td style="text-align:right;">
 
-2.4958%
+3.5940%
 
 </td>
 
 <td style="text-align:right;">
 
-97.4958%
+98.2995%
 
 </td>
 
 <td style="text-align:right;">
 
-0.0159
+0.0160
 
 </td>
 
 <td style="text-align:right;">
 
-0.0186
+0.0189
 
 </td>
 

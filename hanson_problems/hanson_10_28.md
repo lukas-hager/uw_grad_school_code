@@ -283,6 +283,12 @@ pfuel\_log
 
 </table>
 
+### Economic Meaning of Theta
+
+As this is a Cobb-Douglas specification, this implies that there are
+constant returns to scale in the unit prices. If all the prices increase
+by *a*, then the total cost will also increase by *a*.
+
 ### Get CLS Estimates
 
 ``` r
@@ -689,6 +695,9 @@ cat(str_interp(wald_text))
 The p-value of the Wald test is 0.42
 
 ### Compute EMD Test
+
+As the constraint is linear, this will provide the same result as the
+Wald test.
 
 ``` r
 # emd test

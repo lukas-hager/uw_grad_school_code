@@ -66,6 +66,10 @@ basic_reg_results %>%
         caption = 'Ordinary Least Squares')
 ```
 
+### Economic Meaning of Theta
+
+As this is a Cobb-Douglas specification, this implies that there are constant returns to scale in the unit prices. If all the prices increase by *a*, then the total cost will also increase by *a*.
+
 ### Get CLS Estimates
 ```{r}
 # define relevant vectors and matrices
@@ -168,6 +172,8 @@ cat(str_interp(wald_text))
 ```
 
 ### Compute EMD Test
+
+As the constraint is linear, this will provide the same result as the Wald test.
 ```{r,results='asis'}
 # emd test
 
