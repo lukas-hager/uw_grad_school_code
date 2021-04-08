@@ -35,7 +35,7 @@ data_reg <- data_ddk %>%
   na.omit() %>% 
   mutate_all(as.numeric)
 
-basic_reg <- lm(totalscore_z ~ tracking + agetest + girl + etpteacher,
+basic_reg <- lm(totalscore_z ~ tracking + agetest + girl + etpteacher + percentile,
                 data = data_reg)
 
 basic_reg_results <- basic_reg %>% 
@@ -117,25 +117,25 @@ SE Difference
 
 <td style="text-align:right;">
 
-\-0.4252
+\-0.7291
 
 </td>
 
 <td style="text-align:right;">
 
-0.0949
+0.0810
 
 </td>
 
 <td style="text-align:right;">
 
-0.1474
+0.1297
 
 </td>
 
 <td style="text-align:left;">
 
-\-0.0525
+\-0.0488
 
 </td>
 
@@ -151,25 +151,25 @@ tracking
 
 <td style="text-align:right;">
 
-0.1408
+0.1725
 
 </td>
 
 <td style="text-align:right;">
 
-0.0274
+0.0240
 
 </td>
 
 <td style="text-align:right;">
 
-0.0766
+0.0762
 
 </td>
 
 <td style="text-align:left;">
 
-\-0.0492
+\-0.0522
 
 </td>
 
@@ -185,25 +185,25 @@ agetest
 
 <td style="text-align:right;">
 
-0.0241
+\-0.0408
 
 </td>
 
 <td style="text-align:right;">
 
-0.0097
+0.0085
 
 </td>
 
 <td style="text-align:right;">
 
-0.0136
+0.0133
 
 </td>
 
 <td style="text-align:left;">
 
-\-0.0039
+\-0.0048
 
 </td>
 
@@ -219,25 +219,25 @@ girl
 
 <td style="text-align:right;">
 
-0.1214
+0.0812
 
 </td>
 
 <td style="text-align:right;">
 
-0.0276
+0.0241
 
 </td>
 
 <td style="text-align:right;">
 
-0.0339
+0.0285
 
 </td>
 
 <td style="text-align:left;">
 
-\-0.0063
+\-0.0044
 
 </td>
 
@@ -253,25 +253,59 @@ etpteacher
 
 <td style="text-align:right;">
 
-0.1369
+0.1799
 
 </td>
 
 <td style="text-align:right;">
 
-0.0272
+0.0237
 
 </td>
 
 <td style="text-align:right;">
 
-0.0688
+0.0375
 
 </td>
 
 <td style="text-align:left;">
 
-\-0.0416
+\-0.0138
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+percentile
+
+</td>
+
+<td style="text-align:right;">
+
+0.0173
+
+</td>
+
+<td style="text-align:right;">
+
+0.0004
+
+</td>
+
+<td style="text-align:right;">
+
+0.0007
+
+</td>
+
+<td style="text-align:left;">
+
+\-0.0003
 
 </td>
 
@@ -294,7 +328,7 @@ boot_data <- data_reg %>%
 B <- 1000
 
 beta_boot <- map_dfr(c(1:B), function(val){
-  reg <- lm(totalscore_z ~ tracking + agetest + girl + etpteacher,
+  reg <- lm(totalscore_z ~ tracking + agetest + girl + etpteacher + percentile,
             data = boot_data %>% 
               sample_n(nrow(boot_data), 
                        replace = TRUE) %>% 
@@ -391,25 +425,25 @@ SE Bootstrap
 
 <td style="text-align:right;">
 
-\-0.4252
+\-0.7291
 
 </td>
 
 <td style="text-align:right;">
 
-0.0949
+0.0810
 
 </td>
 
 <td style="text-align:right;">
 
-0.1474
+0.1297
 
 </td>
 
 <td style="text-align:left;">
 
-0.1484
+0.1330
 
 </td>
 
@@ -425,25 +459,25 @@ tracking
 
 <td style="text-align:right;">
 
-0.1408
+0.1725
 
 </td>
 
 <td style="text-align:right;">
 
-0.0274
+0.0240
 
 </td>
 
 <td style="text-align:right;">
 
-0.0766
+0.0762
 
 </td>
 
 <td style="text-align:left;">
 
-0.0775
+0.0792
 
 </td>
 
@@ -459,19 +493,19 @@ agetest
 
 <td style="text-align:right;">
 
-0.0241
+\-0.0408
 
 </td>
 
 <td style="text-align:right;">
 
-0.0097
+0.0085
 
 </td>
 
 <td style="text-align:right;">
 
-0.0136
+0.0133
 
 </td>
 
@@ -493,25 +527,25 @@ girl
 
 <td style="text-align:right;">
 
-0.1214
+0.0812
 
 </td>
 
 <td style="text-align:right;">
 
-0.0276
+0.0241
 
 </td>
 
 <td style="text-align:right;">
 
-0.0339
+0.0285
 
 </td>
 
 <td style="text-align:left;">
 
-0.0324
+0.0284
 
 </td>
 
@@ -527,25 +561,59 @@ etpteacher
 
 <td style="text-align:right;">
 
-0.1369
+0.1799
 
 </td>
 
 <td style="text-align:right;">
 
-0.0272
+0.0237
 
 </td>
 
 <td style="text-align:right;">
 
-0.0688
+0.0375
 
 </td>
 
 <td style="text-align:left;">
 
-0.0695
+0.0365
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+percentile
+
+</td>
+
+<td style="text-align:right;">
+
+0.0173
+
+</td>
+
+<td style="text-align:right;">
+
+0.0004
+
+</td>
+
+<td style="text-align:right;">
+
+0.0007
+
+</td>
+
+<td style="text-align:left;">
+
+0.0007
 
 </td>
 
@@ -561,7 +629,7 @@ etpteacher
 # estimate jackknife for BC alpha
 
 beta_jk <- map_dfr(c(1:nrow(data_reg)), function(x){
-  reg_jk <- lm(totalscore_z ~ tracking + agetest + girl + etpteacher,
+  reg_jk <- lm(totalscore_z ~ tracking + agetest + girl + etpteacher + percentile,
                data = data_reg %>% 
                  filter(row_number() != x))
   return(reg_jk$coefficients)
@@ -674,25 +742,25 @@ intercept
 
 <td style="text-align:right;">
 
-2.8883%
+2.7338%
 
 </td>
 
 <td style="text-align:right;">
 
-97.8442%
+97.7181%
 
 </td>
 
 <td style="text-align:right;">
 
-\-0.4281
+\-0.7314
 
 </td>
 
 <td style="text-align:right;">
 
-\-0.4226
+\-0.7267
 
 </td>
 
@@ -708,25 +776,25 @@ tracking
 
 <td style="text-align:right;">
 
-2.6324%
+2.6478%
 
 </td>
 
 <td style="text-align:right;">
 
-97.6270%
+97.6411%
 
 </td>
 
 <td style="text-align:right;">
 
-0.1402
+0.1719
 
 </td>
 
 <td style="text-align:right;">
 
-0.1416
+0.1732
 
 </td>
 
@@ -742,25 +810,25 @@ agetest
 
 <td style="text-align:right;">
 
-2.4204%
+2.4357%
 
 </td>
 
 <td style="text-align:right;">
 
-97.4187%
+97.4352%
 
 </td>
 
 <td style="text-align:right;">
 
-0.0238
+\-0.0410
 
 </td>
 
 <td style="text-align:right;">
 
-0.0244
+\-0.0406
 
 </td>
 
@@ -776,25 +844,25 @@ girl
 
 <td style="text-align:right;">
 
-2.2947%
+2.3980%
 
 </td>
 
 <td style="text-align:right;">
 
-97.2795%
+97.3944%
 
 </td>
 
 <td style="text-align:right;">
 
-0.1207
+0.0805
 
 </td>
 
 <td style="text-align:right;">
 
-0.1221
+0.0819
 
 </td>
 
@@ -810,25 +878,59 @@ etpteacher
 
 <td style="text-align:right;">
 
-2.2617%
+2.4938%
 
 </td>
 
 <td style="text-align:right;">
 
-97.2408%
+97.4938%
 
 </td>
 
 <td style="text-align:right;">
 
-0.1362
+0.1792
 
 </td>
 
 <td style="text-align:right;">
 
-0.1376
+0.1805
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+percentile
+
+</td>
+
+<td style="text-align:right;">
+
+2.1844%
+
+</td>
+
+<td style="text-align:right;">
+
+97.1455%
+
+</td>
+
+<td style="text-align:right;">
+
+0.0173
+
+</td>
+
+<td style="text-align:right;">
+
+0.0173
 
 </td>
 

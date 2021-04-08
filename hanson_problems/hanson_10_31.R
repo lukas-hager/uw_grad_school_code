@@ -29,7 +29,7 @@ data_reg <- data_ddk %>%
   na.omit() %>% 
   mutate_all(as.numeric)
 
-basic_reg <- lm(totalscore_z ~ tracking + agetest + girl + etpteacher,
+basic_reg <- lm(totalscore_z ~ tracking + agetest + girl + etpteacher + percentile,
                 data = data_reg)
 
 basic_reg_results <- basic_reg %>% 
@@ -64,7 +64,7 @@ boot_data <- data_reg %>%
 B <- 1000
 
 beta_boot <- map_dfr(c(1:B), function(val){
-  reg <- lm(totalscore_z ~ tracking + agetest + girl + etpteacher,
+  reg <- lm(totalscore_z ~ tracking + agetest + girl + etpteacher + percentile,
             data = boot_data %>% 
               sample_n(nrow(boot_data), 
                        replace = TRUE) %>% 
@@ -105,7 +105,7 @@ data.table('Term' = basic_reg_results$term,
 # estimate jackknife for BC alpha
 
 beta_jk <- map_dfr(c(1:nrow(data_reg)), function(x){
-  reg_jk <- lm(totalscore_z ~ tracking + agetest + girl + etpteacher,
+  reg_jk <- lm(totalscore_z ~ tracking + agetest + girl + etpteacher + percentile,
                data = data_reg %>% 
                  filter(row_number() != x))
   return(reg_jk$coefficients)
