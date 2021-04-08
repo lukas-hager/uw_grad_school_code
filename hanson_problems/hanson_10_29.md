@@ -290,7 +290,9 @@ se_jk <- sqrt(diag(var_jk))
 ``` r
 # construct bootstrap estimator
 
-beta_boot <- map_dfr(c(1:nrow(data_id)), function(x){
+B <- 1000
+
+beta_boot <- map_dfr(c(1:B), function(x){
   reg_boot <- lm(log_growth ~ log_gdp + log_i + log_vars + log_school,
                data = data_id %>% 
                  dplyr::sample_n(size = nrow(data_id),
@@ -308,7 +310,7 @@ means_boot <- beta_boot %>%
   pivot_longer(everything()) %>% 
   pull(value)
 
-mats <- map(c(1:nrow(data_id)), function(x){
+mats <- map(c(1:B), function(x){
   df <- beta_boot %>% 
     filter(id == x) %>% 
     select(-id) %>% 
@@ -319,7 +321,7 @@ mats <- map(c(1:nrow(data_id)), function(x){
   
 })
 
-var_boot <- (1/(n-1)) * Reduce('+', mats)
+var_boot <- (1/(B-1)) * Reduce('+', mats)
 se_boot <- sqrt(diag(var_boot))
 ```
 
@@ -414,7 +416,7 @@ SE Bootstrap
 
 <td style="text-align:right;">
 
-0.7141
+0.7195
 
 </td>
 
@@ -448,7 +450,7 @@ log\_gdp
 
 <td style="text-align:right;">
 
-0.0492
+0.0562
 
 </td>
 
@@ -482,7 +484,7 @@ log\_i
 
 <td style="text-align:right;">
 
-0.1063
+0.1079
 
 </td>
 
@@ -516,7 +518,7 @@ log\_vars
 
 <td style="text-align:right;">
 
-0.2202
+0.2278
 
 </td>
 
@@ -550,7 +552,7 @@ log\_school
 
 <td style="text-align:right;">
 
-0.0677
+0.0693
 
 </td>
 
@@ -649,7 +651,7 @@ SE Bootstrap
 
 <td style="text-align:right;">
 
-0.2556
+0.2596
 
 </td>
 
@@ -711,13 +713,13 @@ Bootstrapped CIs Using Percentile Method
 
 <td style="text-align:right;">
 
-\-0.2304
+\-0.2806
 
 </td>
 
 <td style="text-align:right;">
 
-0.6604
+0.74
 
 </td>
 
@@ -784,13 +786,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <td style="text-align:right;">
 
-\-0.1835
+\-0.2286
 
 </td>
 
 <td style="text-align:right;">
 
-0.6741
+0.7721
 
 </td>
 

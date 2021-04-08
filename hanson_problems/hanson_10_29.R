@@ -120,7 +120,9 @@ se_jk <- sqrt(diag(var_jk))
 
 # construct bootstrap estimator
 
-beta_boot <- map_dfr(c(1:nrow(data_id)), function(x){
+B <- 1000
+
+beta_boot <- map_dfr(c(1:B), function(x){
   reg_boot <- lm(log_growth ~ log_gdp + log_i + log_vars + log_school,
                data = data_id %>% 
                  dplyr::sample_n(size = nrow(data_id),
@@ -138,7 +140,7 @@ means_boot <- beta_boot %>%
   pivot_longer(everything()) %>% 
   pull(value)
 
-mats <- map(c(1:nrow(data_id)), function(x){
+mats <- map(c(1:B), function(x){
   df <- beta_boot %>% 
     filter(id == x) %>% 
     select(-id) %>% 
@@ -149,7 +151,7 @@ mats <- map(c(1:nrow(data_id)), function(x){
   
 })
 
-var_boot <- (1/(n-1)) * Reduce('+', mats)
+var_boot <- (1/(B-1)) * Reduce('+', mats)
 se_boot <- sqrt(diag(var_boot))
 
 data.table('Term' = mrw_basic_reg_summary$term,

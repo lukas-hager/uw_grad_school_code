@@ -907,7 +907,9 @@ pfuel\_log
 ### Construct Bootstrap Estimator for OLS
 
 ``` r
-beta_boot <- map_dfr(c(1:nrow(data_id)), function(x){
+B <- 1000
+
+beta_boot <- map_dfr(c(1:B), function(x){
   reg_jk <- lm(cost_log ~ output_log + plabor_log + 
                  pcapital_log + pfuel_log,
                data = data_id %>% 
@@ -926,7 +928,7 @@ means_boot <- beta_boot %>%
   pivot_longer(everything()) %>% 
   pull(value)
 
-mats <- map(c(1:nrow(data_id)), function(x){
+mats <- map(c(1:B), function(x){
   df <- beta_boot %>% 
     filter(id == x) %>% 
     select(-id) %>% 
@@ -937,7 +939,7 @@ mats <- map(c(1:nrow(data_id)), function(x){
   
 })
 
-var_boot <- (1/(n-1)) * Reduce('+', mats)
+var_boot <- (1/(B-1)) * Reduce('+', mats)
 se_boot <- sqrt(diag(var_boot))
 
 # report results
@@ -1030,7 +1032,7 @@ SE Bootstrap
 
 <td style="text-align:right;">
 
-1.7448
+1.7477
 
 </td>
 
@@ -1064,7 +1066,7 @@ output\_log
 
 <td style="text-align:right;">
 
-0.0317
+0.0346
 
 </td>
 
@@ -1098,7 +1100,7 @@ plabor\_log
 
 <td style="text-align:right;">
 
-0.2211
+0.2503
 
 </td>
 
@@ -1132,7 +1134,7 @@ pcapital\_log
 
 <td style="text-align:right;">
 
-0.3255
+0.3327
 
 </td>
 
@@ -1166,7 +1168,7 @@ pfuel\_log
 
 <td style="text-align:right;">
 
-0.0748
+0.0775
 
 </td>
 
@@ -1263,7 +1265,7 @@ SE Bootstrap
 
 <td style="text-align:right;">
 
-0.3983
+0.4453
 
 </td>
 
@@ -1323,13 +1325,13 @@ Bootstrapped CIs Using Percentile Method
 
 <td style="text-align:right;">
 
-\-0.0725
+\-0.1886
 
 </td>
 
 <td style="text-align:right;">
 
-1.5327
+1.5472
 
 </td>
 
@@ -1383,13 +1385,13 @@ Bootstrapped CIs Using BC Alpha Method
 
 <th style="text-align:right;">
 
-3.655509%
+2.095656%
 
 </th>
 
 <th style="text-align:right;">
 
-98.26325%
+97.08089%
 
 </th>
 
@@ -1403,13 +1405,13 @@ Bootstrapped CIs Using BC Alpha Method
 
 <td style="text-align:right;">
 
-0.0231
+\-0.2156
 
 </td>
 
 <td style="text-align:right;">
 
-1.5826
+1.5383
 
 </td>
 
