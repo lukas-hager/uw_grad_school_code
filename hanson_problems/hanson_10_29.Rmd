@@ -253,7 +253,6 @@ quantile(theta_boot, c(x_alpha(.025),
                        x_alpha(.975))) %>% 
   t() %>% 
   kable(.,
-        col.names = c('2.5%', '97.5%'),
         format = 'html',
         digits = 4,
         align = 'rr',

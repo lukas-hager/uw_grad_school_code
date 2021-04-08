@@ -745,7 +745,6 @@ quantile(theta_boot, c(x_alpha(.025),
                        x_alpha(.975))) %>% 
   t() %>% 
   kable(.,
-        col.names = c('2.5%', '97.5%'),
         format = 'html',
         digits = 4,
         align = 'rr',
@@ -766,13 +765,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <th style="text-align:right;">
 
-2.5%
+3.291546%
 
 </th>
 
 <th style="text-align:right;">
 
-97.5%
+98.12535%
 
 </th>
 
