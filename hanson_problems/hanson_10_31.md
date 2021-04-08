@@ -443,7 +443,7 @@ SE Bootstrap
 
 <td style="text-align:left;">
 
-0.1330
+0.1274
 
 </td>
 
@@ -477,7 +477,7 @@ tracking
 
 <td style="text-align:left;">
 
-0.0792
+0.0730
 
 </td>
 
@@ -511,7 +511,7 @@ agetest
 
 <td style="text-align:left;">
 
-0.0134
+0.0133
 
 </td>
 
@@ -579,7 +579,7 @@ etpteacher
 
 <td style="text-align:left;">
 
-0.0365
+0.0369
 
 </td>
 
@@ -646,16 +646,13 @@ x_alpha <- function(alpha, z_0, a){
   return(pnorm(z_0 + (z_a + z_0) / (1 + a * (z_a + z_0))))
 }
 
-vars <- colnames(beta_jk %>% 
-                   select(-id))
+vars <- colnames(beta_boot)
 
 cis <- map_dfr(vars, function(var){
-  beta_val <- beta_jk %>% 
+  beta_val <- beta_boot %>% 
     pull(var)
   
-  beta <- basic_reg$coefficients[ifelse(var == 'intercept',
-                                        '(Intercept)',
-                                        var)]
+  beta <- basic_reg$coefficients[var]
   
   p_star <- sum(beta_val >= beta) / length(beta_val)
   z_0 <- qnorm(p_star)
@@ -736,31 +733,31 @@ Upper Bound
 
 <td style="text-align:left;">
 
-intercept
+(Intercept)
 
 </td>
 
 <td style="text-align:right;">
 
-2.7338%
+2.3618%
 
 </td>
 
 <td style="text-align:right;">
 
-97.7181%
+97.3549%
 
 </td>
 
 <td style="text-align:right;">
 
-\-0.7314
+\-0.9952
 
 </td>
 
 <td style="text-align:right;">
 
-\-0.7267
+\-0.4790
 
 </td>
 
@@ -776,25 +773,25 @@ tracking
 
 <td style="text-align:right;">
 
-2.6478%
+2.4385%
 
 </td>
 
 <td style="text-align:right;">
 
-97.6411%
+97.4372%
 
 </td>
 
 <td style="text-align:right;">
 
-0.1719
+0.0256
 
 </td>
 
 <td style="text-align:right;">
 
-0.1732
+0.3152
 
 </td>
 
@@ -810,25 +807,25 @@ agetest
 
 <td style="text-align:right;">
 
-2.4357%
+2.7569%
 
 </td>
 
 <td style="text-align:right;">
 
-97.4352%
+97.7370%
 
 </td>
 
 <td style="text-align:right;">
 
-\-0.0410
+\-0.0661
 
 </td>
 
 <td style="text-align:right;">
 
-\-0.0406
+\-0.0132
 
 </td>
 
@@ -844,25 +841,25 @@ girl
 
 <td style="text-align:right;">
 
-2.3980%
+3.0629%
 
 </td>
 
 <td style="text-align:right;">
 
-97.3944%
+97.9726%
 
 </td>
 
 <td style="text-align:right;">
 
-0.0805
+0.0291
 
 </td>
 
 <td style="text-align:right;">
 
-0.0819
+0.1412
 
 </td>
 
@@ -878,25 +875,25 @@ etpteacher
 
 <td style="text-align:right;">
 
-2.4938%
+1.9096%
 
 </td>
 
 <td style="text-align:right;">
 
-97.4938%
+96.7616%
 
 </td>
 
 <td style="text-align:right;">
 
-0.1792
+0.1058
 
 </td>
 
 <td style="text-align:right;">
 
-0.1805
+0.2487
 
 </td>
 
@@ -912,25 +909,25 @@ percentile
 
 <td style="text-align:right;">
 
-2.1844%
+2.4958%
 
 </td>
 
 <td style="text-align:right;">
 
-97.1455%
+97.4958%
 
 </td>
 
 <td style="text-align:right;">
 
-0.0173
+0.0159
 
 </td>
 
 <td style="text-align:right;">
 
-0.0173
+0.0186
 
 </td>
 

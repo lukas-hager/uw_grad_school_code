@@ -138,16 +138,13 @@ x_alpha <- function(alpha, z_0, a){
   return(pnorm(z_0 + (z_a + z_0) / (1 + a * (z_a + z_0))))
 }
 
-vars <- colnames(beta_jk %>% 
-                   select(-id))
+vars <- colnames(beta_boot)
 
 cis <- map_dfr(vars, function(var){
-  beta_val <- beta_jk %>% 
+  beta_val <- beta_boot %>% 
     pull(var)
   
-  beta <- basic_reg$coefficients[ifelse(var == 'intercept',
-                                        '(Intercept)',
-                                        var)]
+  beta <- basic_reg$coefficients[var]
   
   p_star <- sum(beta_val >= beta) / length(beta_val)
   z_0 <- qnorm(p_star)
