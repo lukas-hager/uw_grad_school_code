@@ -1,0 +1,223 @@
+rm(list = ls())
+
+gc()
+gc()
+
+library(data.table)
+library(broom)
+library(knitr)
+library(sandwich)
+library(lmtest)
+library(MASS)
+library(tidyverse)
+
+set.seed(2021)
+
+#########################################################
+# Exercise 9.27
+#########################################################
+
+# read in data
+
+mrw <- fread('https://www.ssc.wisc.edu/~bhansen/econometrics/MRW1992.txt')
+
+# estimate unrestricted model
+
+mrw_reg <- mrw %>% 
+  filter(N == 1) %>% 
+  mutate(log_growth = log(Y85) - log(Y60),
+         log_gdp = log(Y60),
+         log_i = log(invest/100),
+         log_vars = log(.05 + pop_growth/100),
+         log_school = log(school/100))
+
+mrw_basic_reg <- lm(log_growth ~ log_gdp + log_i + log_vars + log_school,
+                    data = mrw_reg)
+
+mrw_basic_reg_summary <- tidy(mrw_basic_reg)
+
+# get heteroskedastic-consistent SEs from sandwich
+
+V_mrw <- vcovHC(mrw_basic_reg, 
+                type = "HC1")
+
+se_mrw <- V_mrw %>% 
+  diag() %>% 
+  sqrt()
+
+# report to show the output matches
+
+data.table('term' = mrw_basic_reg_summary$term,
+           'estimate' = mrw_basic_reg_summary$estimate,
+           'std.error' = se_mrw) %>% 
+  kable(.,
+        format = 'latex',
+        digits = 4,
+        align = 'lrr',
+        caption = 'Estimates of Solow Growth Model')
+
+# define parameters for test
+
+beta_ols <- mrw_basic_reg_summary$estimate
+R <- c(0,0,1,1,1)
+c <- 0
+X <- mrw_reg %>% 
+  mutate(cons = 1) %>% 
+  select(cons, log_gdp, log_i, log_vars, log_school) %>% 
+  as.matrix()
+n <- dim(X)[1]
+k <- dim(X)[2]
+q <- length(c)
+# run the Wald test
+
+constraint <- t(R) %*% beta_ols - c
+w_n <- t(constraint) %*% ginv(t(R) %*% V_mrw %*% R) %*% constraint %>% 
+  as.vector()
+
+p_wald <- round(1 - pchisq(w_n, df = q), 2)
+wald_text <- 'The p-value of the Wald test is ${p_wald}.'
+cat(str_interp(wald_text))
+
+#########################################################
+# Exercise 10.29
+#########################################################
+
+# get beta estimators from jackknife
+
+data_id <- mrw_reg %>% 
+  mutate(id = row_number())
+
+beta_jk <- map_dfr(c(1:nrow(data_id)), function(x){
+  reg_jk <- lm(log_growth ~ log_gdp + log_i + log_vars + log_school,
+               data = data_id %>% 
+                 filter(id != x))
+  return(reg_jk$coefficients)
+}) %>% 
+  rename_all(list(~ tolower(str_replace_all(., 
+                                            '\\(|\\)', 
+                                            '')))) %>% 
+  mutate(id = row_number())
+
+means_jk <- beta_jk %>% 
+  select(-id) %>% 
+  summarise_all(list('mean' = mean)) %>% 
+  pivot_longer(everything()) %>% 
+  pull(value)
+
+mats <- map(c(1:nrow(data_id)), function(x){
+  df <- beta_jk %>% 
+    filter(id == x) %>% 
+    select(-id) %>% 
+    pivot_longer(everything()) %>% 
+    pull(value)
+  
+  return((df - means_jk) %*% t(df - means_jk))
+  
+})
+
+var_jk <- ((n-1)/n) * Reduce('+', mats)
+se_jk <- sqrt(diag(var_jk))
+
+# construct bootstrap estimator
+
+B <- 1000
+
+beta_boot <- map_dfr(c(1:B), function(x){
+  reg_boot <- lm(log_growth ~ log_gdp + log_i + log_vars + log_school,
+               data = data_id %>% 
+                 dplyr::sample_n(size = nrow(data_id),
+                                 replace = TRUE))
+  return(reg_boot$coefficients)
+}) %>% 
+  rename_all(list(~ tolower(str_replace_all(., 
+                                            '\\(|\\)', 
+                                            '')))) %>% 
+  mutate(id = row_number())
+
+means_boot <- beta_boot %>% 
+  select(-id) %>% 
+  summarise_all(list('mean' = mean)) %>% 
+  pivot_longer(everything()) %>% 
+  pull(value)
+
+mats <- map(c(1:B), function(x){
+  df <- beta_boot %>% 
+    filter(id == x) %>% 
+    select(-id) %>% 
+    pivot_longer(everything()) %>% 
+    pull(value)
+  
+  return((df - means_boot) %*% t(df - means_boot))
+  
+})
+
+var_boot <- (1/(B-1)) * Reduce('+', mats)
+se_boot <- sqrt(diag(var_boot))
+
+data.table('Term' = mrw_basic_reg_summary$term,
+           'Estimate' = mrw_basic_reg_summary$estimate,
+           'SE Asymptotic' = se_mrw,
+           'SE Jackknife' = se_jk,
+           'SE Bootstrap' = se_boot) %>% 
+  kable(.,
+        format = 'latex',
+        digits = 4,
+        align = 'lrrrr',
+        caption = 'Estimates of Solow Growth Model')
+
+# estimation of theta is straightforward
+
+theta <- mrw_basic_reg_summary %>% 
+  filter(term %in% c('log_i', 'log_vars', 'log_school')) %>% 
+  pull(estimate) %>% 
+  sum()
+
+# variance is given by the variance-covariance matrix 
+
+get_theta_var <- function(vcov_mat){
+  return(sqrt(sum(vcov_mat[3:5,3:5])))
+}
+
+data.table('Theta' = theta,
+           'SE Asymptotic' = get_theta_var(V_mrw),
+           'SE Jackknife' = get_theta_var(var_jk),
+           'SE Bootstrap' = get_theta_var(var_boot)) %>% 
+  kable(.,
+        format = 'latex',
+        digits = 4,
+        align = 'lrrr',
+        caption = 'Estimate of Theta in Solow Growth Model')
+
+# confidence interval by percentile method requires knowing 
+# quantiles of the beta estimates
+
+theta_boot <- beta_boot %>% 
+  mutate(theta = log_i + log_vars + log_school) %>% 
+  pull()
+
+quantile(theta_boot, c(.025, .975)) %>% 
+  t() %>% 
+  kable(.,
+        format = 'latex',
+        digits = 4,
+        align = 'rr',
+        caption = 'Bootstrapped CIs Using Percentile Method')
+
+# to correct with bias, we need the median bias
+
+p_star <- sum(theta_boot >= theta) / length(theta_boot)
+z_0 <- qnorm(p_star)
+
+x_alpha <- function(alpha){
+  return(pnorm(qnorm(alpha) + 2*z_0))
+}
+
+quantile(theta_boot, c(x_alpha(.025), 
+                       x_alpha(.975))) %>% 
+  t() %>% 
+  kable(.,
+        col.names = c('2.5%', '97.5%'),
+        format = 'latex',
+        digits = 4,
+        align = 'rr',
+        caption = 'Bootstrapped CIs Using BC Percentile Method')
