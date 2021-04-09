@@ -24,6 +24,8 @@ library(tidyverse) # important for data manipulation, includes dplyr
 ### Produce Regression Output with Robust SEs
 
 ``` r
+set.seed(2021)
+
 # read in data
 
 data_cps <- 'https://www.ssc.wisc.edu/~bhansen/econometrics/cps09mar.xlsx' %>% 
@@ -247,9 +249,9 @@ exp\_2
 ### Calculate Theta and SE
 
 ``` r
-# return to educ = exp(beta_1)
-# return to exp at ten years = exp(beta_2 + beta_3/5)
-# theta is exp(beta_1 - beta_2 - beta_3/5)
+# return to educ = beta_1
+# return to exp at ten years = beta_2 + beta_3/5
+# theta is beta_1 - beta_2 - beta_3/5
 
 b1 <- basic_reg_summary[term == 'education']$estimate
 b2 <- basic_reg_summary[term == 'exp']$estimate
@@ -702,7 +704,7 @@ SE Bootstrap
 
 <td style="text-align:right;">
 
-1.1364
+1.0687
 
 </td>
 
@@ -754,13 +756,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <th style="text-align:right;">
 
-2.066532%
+1.74075%
 
 </th>
 
 <th style="text-align:right;">
 
-96.99276%
+96.48074%
 
 </th>
 
@@ -774,13 +776,13 @@ Bootstrapped CIs Using BC Percentile Method
 
 <td style="text-align:right;">
 
-1.7572
+1.7165
 
 </td>
 
 <td style="text-align:right;">
 
-5.0225
+5.3844
 
 </td>
 

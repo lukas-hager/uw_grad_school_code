@@ -29,6 +29,9 @@ library(tidyverse) # important for data manipulation, includes dplyr
 ### Produce Regression Output with Robust SEs
 
 ```{r}
+
+set.seed(2021)
+
 # read in data
 
 data_cps <- 'https://www.ssc.wisc.edu/~bhansen/econometrics/cps09mar.xlsx' %>% 
@@ -64,9 +67,9 @@ coeftest(basic_reg,
 ### Calculate Theta and SE
 
 ```{r}
-# return to educ = exp(beta_1)
-# return to exp at ten years = exp(beta_2 + beta_3/5)
-# theta is exp(beta_1 - beta_2 - beta_3/5)
+# return to educ = beta_1
+# return to exp at ten years = beta_2 + beta_3/5
+# theta is beta_1 - beta_2 - beta_3/5
 
 b1 <- basic_reg_summary[term == 'education']$estimate
 b2 <- basic_reg_summary[term == 'exp']$estimate
