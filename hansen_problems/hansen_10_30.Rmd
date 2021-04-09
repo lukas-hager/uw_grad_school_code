@@ -259,7 +259,7 @@ This is likely due to the small sample size (*n* = 99). In particular, the asymp
 ### CI using BC Percentile method
 
 ```{r}
-p_star <- mean(theta_boot <= theta_hat)
+p_star <- mean(theta_boot <= theta_hat_s)
 z_0 <- qnorm(p_star)
 
 x_alpha <- function(alpha){
