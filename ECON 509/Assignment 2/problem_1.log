@@ -1,0 +1,32 @@
+Starting preprocessing of the model file ...
+Found 6 equation(s).
+Evaluating expressions...done
+Computing static model derivatives (order 1).
+Computing dynamic model derivatives (order 1).
+Processing outputs ...
+done
+Preprocessing completed.
+
+STEADY-STATE RESULTS:
+
+c 		 1.40255
+k 		 5.7476
+l 		 1.11313
+z 		 1
+w 		 1.15463
+r 		 0.120408
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('print_info', '/Applications/Dynare/4.6.4/matlab/print_info.m', 32)" style="font-weight:bold">print_info</a> (<a href="matlab: opentoline('/Applications/Dynare/4.6.4/matlab/print_info.m',32,0)">line 32</a>)
+Blanchard & Kahn conditions are not satisfied: indeterminacy.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('stoch_simul', '/Applications/Dynare/4.6.4/matlab/stoch_simul.m', 107)" style="font-weight:bold">stoch_simul</a> (<a href="matlab: opentoline('/Applications/Dynare/4.6.4/matlab/stoch_simul.m',107,0)">line 107</a>)
+    print_info(info, options_.noprint, options_);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('problem_1.driver', '/Users/hlukas/git/uw_grad_school_code/ECON 509/Assignment 2/+problem_1/driver.m', 205)" style="font-weight:bold">problem_1.driver</a> (<a href="matlab: opentoline('/Users/hlukas/git/uw_grad_school_code/ECON 509/Assignment 2/+problem_1/driver.m',205,0)">line 205</a>)
+[info, oo_, options_, M_] = stoch_simul(M_, options_, oo_, var_list_);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('dynare', '/Applications/Dynare/4.6.4/matlab/dynare.m', 293)" style="font-weight:bold">dynare</a> (<a href="matlab: opentoline('/Applications/Dynare/4.6.4/matlab/dynare.m',293,0)">line 293</a>)
+evalin('base',[fname '.driver']) ;
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run_dynare_ps2', '/Users/hlukas/git/uw_grad_school_code/ECON 509/Assignment 2/run_dynare_ps2.m', 12)" style="font-weight:bold">run_dynare_ps2</a> (<a href="matlab: opentoline('/Users/hlukas/git/uw_grad_school_code/ECON 509/Assignment 2/run_dynare_ps2.m',12,0)">line 12</a>)
+dynare problem_1.mod;
+} 

@@ -1,0 +1,75 @@
+Starting preprocessing of the model file ...
+Found 5 equation(s).
+Evaluating expressions...done
+Computing static model derivatives (order 1).
+Computing dynamic model derivatives (order 1).
+Processing outputs ...
+done
+Preprocessing completed.
+
+STEADY-STATE RESULTS:
+
+pi 		 0
+i  		 0
+x  		 0
+ep 		 0
+ex 		 0
+
+MODEL SUMMARY
+
+  Number of variables:         5
+  Number of stochastic shocks: 2
+  Number of state variables:   2
+  Number of jumpers:           1
+  Number of static variables:  2
+
+
+MATRIX OF COVARIANCE OF EXOGENOUS SHOCKS
+Variables        etap      etax
+etap         0.000100  0.000000
+etax         0.000000  0.000025
+
+POLICY AND TRANSITION FUNCTIONS
+                                  pi               i               x              ep              ex
+ep(-1)                     10.795455       10.255682               0        0.950000               0
+ex(-1)                             0        1.900000               0               0        0.950000
+etap                       11.363636       10.795455               0        1.000000               0
+etax                               0        2.000000               0               0        1.000000
+
+
+THEORETICAL MOMENTS
+VARIABLE         MEAN  STD. DEV.   VARIANCE
+pi             0.0000     0.3639     0.1324
+i              0.0000     0.3472     0.1206
+x              0.0000     0.0000     0.0000
+ep             0.0000     0.0320     0.0010
+ex             0.0000     0.0160     0.0003
+
+
+
+VARIANCE DECOMPOSITION (in percent)
+        etap    etax
+pi    100.00    0.00
+i      99.15    0.85
+x        NaN     NaN
+ep    100.00    0.00
+ex      0.00  100.00
+
+
+
+MATRIX OF CORRELATIONS
+Variables        pi       i      ep      ex
+pi           1.0000  0.9957  1.0000  0.0000
+i            0.9957  1.0000  0.9957  0.0922
+ep           1.0000  0.9957  1.0000  0.0000
+ex           0.0000  0.0922  0.0000  1.0000
+
+
+
+COEFFICIENTS OF AUTOCORRELATION
+Order          1       2       3       4       5
+pi        0.9500  0.9025  0.8574  0.8145  0.7738
+i         0.9500  0.9025  0.8574  0.8145  0.7738
+ep        0.9500  0.9025  0.8574  0.8145  0.7738
+ex        0.9500  0.9025  0.8574  0.8145  0.7738
+Total computing time : 0h00m02s
