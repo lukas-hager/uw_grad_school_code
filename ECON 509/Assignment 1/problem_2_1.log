@@ -1,0 +1,77 @@
+Starting preprocessing of the model file ...
+Found 5 equation(s).
+Evaluating expressions...done
+Computing static model derivatives (order 1).
+Computing dynamic model derivatives (order 1).
+Processing outputs ...
+done
+Preprocessing completed.
+
+STEADY-STATE RESULTS:
+
+pi 		 5.55112e-17
+x  		 0
+i  		 5.55112e-17
+ep 		 0
+ex 		 0
+
+MODEL SUMMARY
+
+  Number of variables:         5
+  Number of stochastic shocks: 2
+  Number of state variables:   2
+  Number of jumpers:           2
+  Number of static variables:  1
+
+
+MATRIX OF COVARIANCE OF EXOGENOUS SHOCKS
+Variables        etap      etax
+etap         0.000100  0.000000
+etax         0.000000  0.000025
+
+POLICY AND TRANSITION FUNCTIONS
+                                  pi               x               i              ep              ex
+ep(-1)                      1.332398       -3.330996        1.598878        0.950000               0
+ex(-1)                             0               0        1.900000               0        0.950000
+etap                        1.402525       -3.506311        1.683029        1.000000               0
+etax                               0               0        2.000000               0        1.000000
+
+
+THEORETICAL MOMENTS
+VARIABLE         MEAN  STD. DEV.   VARIANCE
+pi             0.0000     0.0449     0.0020
+x              0.0000     0.1123     0.0126
+i              0.0000     0.0627     0.0039
+ep             0.0000     0.0320     0.0010
+ex             0.0000     0.0160     0.0003
+
+
+
+VARIANCE DECOMPOSITION (in percent)
+        etap    etax
+pi    100.00    0.00
+x     100.00    0.00
+i      73.91   26.09
+ep    100.00    0.00
+ex      0.00  100.00
+
+
+
+MATRIX OF CORRELATIONS
+Variables        pi       x       i      ep      ex
+pi           1.0000 -1.0000  0.8597  1.0000  0.0000
+x           -1.0000  1.0000 -0.8597 -1.0000  0.0000
+i            0.8597 -0.8597  1.0000  0.8597  0.5108
+ep           1.0000 -1.0000  0.8597  1.0000  0.0000
+ex           0.0000  0.0000  0.5108  0.0000  1.0000
+
+
+
+COEFFICIENTS OF AUTOCORRELATION
+Order          1       2       3       4       5
+pi        0.9500  0.9025  0.8574  0.8145  0.7738
+x         0.9500  0.9025  0.8574  0.8145  0.7738
+i         0.9500  0.9025  0.8574  0.8145  0.7738
+ep        0.9500  0.9025  0.8574  0.8145  0.7738
+ex        0.9500  0.9025  0.8574  0.8145  0.7738
+Total computing time : 0h00m02s
