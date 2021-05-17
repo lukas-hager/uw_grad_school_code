@@ -71,9 +71,17 @@ xlabel('a')
 ylabel('V(a,z)')
 title('Value Function')
 nexttile
-plot(a_grid, policy(1,:),a_grid,policy(2,:))
-legend({'z=.5', 'z=1'}, 'Location', 'northwest')
+plot(a_grid, policy(1,:),a_grid,policy(2,:),a_grid,a_grid, '--')
+legend({'z=.5', 'z=1', '45 Degrees'}, 'Location', 'northwest')
 xlabel('a')
 ylabel('a(a,z)')
 title('Policy Function');
 saveas(gcf,'policy_and_value_functions.png');
+
+% write functions
+
+value_df = array2table(V_new','RowNames',string(a_grid),'VariableNames',string(z_grid));
+writetable(value_df, 'value_df.xlsx')
+
+policy_df = array2table(policy','RowNames',string(a_grid),'VariableNames',string(z_grid));
+writetable(policy_df, 'policy_df.xlsx')
