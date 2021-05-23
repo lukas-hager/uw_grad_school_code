@@ -148,7 +148,8 @@ end
 xlabel('a')
 ylabel('V(a,z)')
 title('Value Function')
-hold off
+hold off;
+saveas(gcf,'value_functions.png');
 
 % plot the policy functions
 figure;
@@ -159,7 +160,9 @@ end
 xlabel('a')
 ylabel('a''(a,z)')
 title('Policy Function')
-hold off
+hold off;
+saveas(gcf,'policy_functions.png');
 
 % plot density as heatmap
-heatmap(reshape(stat_dist, 150, 7))
+heatmap(reshape(stat_dist, 150, 7));
+saveas(gcf,'state_space_density.png');
