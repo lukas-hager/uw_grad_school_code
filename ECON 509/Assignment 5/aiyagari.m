@@ -125,14 +125,14 @@ while crit > .001
 
     % get aggregate savings
     stat_dist = mc_invdist(transition_mat);
-    savings = sum(policy .* reshape(stat_dist', 150, 7), 'all');
+    savings = sum(policy .* reshape(stat_dist, 150, 7), 'all');
 
     % compute criterion and update k,w,r
     crit = abs((k - savings) / k);
     k = k + .1*(savings - k);
     w = (1-alpha)*l_mean^(-alpha)*k^(alpha);
-    r = alpha*l_mean^(1-alpha)*k^(alpha-1);
-    fprintf('Capital Guess: %i\n', k);
+    r = alpha*l_mean^(1-alpha)*k^(alpha-1) - delta;
+    %fprintf('Capital Guess: %i\n', k);
 end
 
 fprintf('Q1.3: Aiyagari Capital = %f\n', k);
@@ -162,4 +162,4 @@ title('Policy Function')
 hold off
 
 % plot density as heatmap
-heatmap(reshape(stat_dist', 150, 7))
+heatmap(reshape(stat_dist, 150, 7))
