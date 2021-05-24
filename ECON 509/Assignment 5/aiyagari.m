@@ -142,11 +142,12 @@ fprintf('Q1.3: Aiyagari Interest Rate = %f\n', r);
 % plot the value functions
 figure;
 hold on
+legend()
 for val = 1:7
-    plot(a_grid, V_new(:, val));
+    plot(a_grid, V_new(:, val),'DisplayName',string(l_grid(val)));
 end
 xlabel('a')
-ylabel('V(a,z)')
+ylabel('V(a,l)')
 title('Value Function')
 hold off;
 saveas(gcf,'value_functions.png');
@@ -154,15 +155,26 @@ saveas(gcf,'value_functions.png');
 % plot the policy functions
 figure;
 hold on
+legend()
 for val = 1:7
-    plot(a_grid, policy(:, val));
+    plot(a_grid, policy(:, val),'DisplayName',string(l_grid(val)));
 end
 xlabel('a')
-ylabel('a''(a,z)')
+ylabel('a''(a,l)')
 title('Policy Function')
 hold off;
 saveas(gcf,'policy_functions.png');
 
-% plot density as heatmap
-heatmap(reshape(stat_dist, 150, 7));
-saveas(gcf,'state_space_density.png');
+% plot density
+dens = reshape(stat_dist, 150, 7);
+figure;
+hold on
+legend()
+for val = 1:7
+    plot(a_grid, dens(:, val),'DisplayName',string(l_grid(val)));
+end
+xlabel('a')
+ylabel('p(a,l)')
+title('Wealth Density Function')
+hold off;
+saveas(gcf,'density_functions.png');
