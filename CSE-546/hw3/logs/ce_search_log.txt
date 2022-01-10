@@ -1,0 +1,6 @@
+Training Model: Linear Regression
+Training Model: 1 Layer NN (Sigmoid)
+Training Model: 1 Layer NN (ReLU)
+Training Model: 2 Layer NN (Sigmoid, ReLU)
+Training Model: 2 Layer NN (ReLU, Sigmoid)
+Best Model Accuracy on Test Set: 0.917

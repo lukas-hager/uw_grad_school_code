@@ -1,0 +1,62 @@
+rm(list = ls())
+
+gc()
+gc()
+
+library(data.table)
+library(tidyverse)
+
+# source functions
+
+dir_path <- dirname(rstudioapi::getSourceEditorContext()$path)
+setwd(dir_path)
+source('functions.R')
+
+# read in the airline data
+
+file_path <- '/Users/hlukas/Google Drive/Grad School/2021-2022/Winter/ECON 532/Assignments/Assignment 1/pset1_upload/airline.txt'
+
+data_og <- fread(file_path) %>% 
+  rename_all(tolower)
+
+# one-hot encode the day of week
+
+data_binary <- data_og %>% 
+  mutate(late = as.numeric(arr_delay > 15),
+         cons = 1)
+
+# define variables
+
+y <- data_binary %>% 
+  pull(late)
+
+X <- data_binary %>% 
+  select(cons, distance, dep_delay) %>% 
+  as.matrix()
+
+# write a function to return log likelihood
+
+get_ll <- function(b_hat,X_val,y_val){
+  if (length(b_hat) != dim(X_val)[2] | length(y_val) != dim(X_val)[1]){
+    stop('Dimension mismatch.')
+  }
+  
+  exp_term <- exp(X_val %*% b_hat)
+  prob_1 <- exp_term / (1 + exp_term)
+  prob_0 <- 1-prob_1
+  return(-1 * sum(y_val * log(prob_1) + (1-y_val) * log(prob_0)))
+}
+
+# optimize to get the minimum
+
+optimization <- optim(rep(0,dim(X)[2]), get_ll, X_val = X, y_val = y, control = list(maxit = 1000000))
+beta_hat_optim <- optimization$par
+names(beta_hat_optim) <- dimnames(X)[[2]]
+
+# print results
+
+cat(str_interp('Algorithm ${ifelse(optimization$convergence == 0, "Converged", "Did Not Converge")}\n'))
+cat('Variables:\n')
+cat(str_c(str_c(names(beta_hat_optim), collapse = '\n'), '\n'))
+cat('Point Estimates:\n')
+create_latex_matrix(beta_hat_optim, 5)
