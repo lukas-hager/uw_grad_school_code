@@ -23,7 +23,8 @@ data_og <- fread(file_path) %>%
 
 data_binary <- data_og %>% 
   mutate(late = as.numeric(arr_delay > 15),
-         cons = 1)
+         cons = 1) %>% 
+  filter(dep_delay <= 100)
 
 # define variables
 
@@ -76,3 +77,5 @@ final_df <- data_binary %>%
 model <- glm(late ~ distance + dep_delay, 
              data = data_binary, 
              family=binomial(link='logit'))
+
+cat(str_interp('Difference in coefficients: ${beta_hat_optim - model$coefficients}'))

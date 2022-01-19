@@ -6,6 +6,12 @@ gc()
 library(data.table)
 library(tidyverse)
 
+# source functions
+
+dir_path <- dirname(rstudioapi::getSourceEditorContext()$path)
+setwd(dir_path)
+source('functions.R')
+
 # read in the airline data
 
 file_path <- '/Users/hlukas/Google Drive/Grad School/2021-2022/Winter/ECON 532/Assignments/Assignment 1/pset1_upload/airline.txt'
@@ -40,6 +46,9 @@ X <- data_one_hot %>%
 
 beta_hat_form <- solve(t(X) %*% X) %*% t(X) %*% y
 
+cat('Formula beta:\n')
+create_latex_matrix(beta_hat_form, 5)
+
 # get OLS coefficients with base R method to check
 
 data_base_r <- data_og %>% 
@@ -66,7 +75,16 @@ optimization <- optim(rep(0,dim(X)[2]), get_squared_error, X_val = X, y_val = y,
 beta_hat_optim <- optimization$par
 names(beta_hat_optim) <- dimnames(X)[[2]]
 
+cat('Optimized beta:\n')
+create_latex_matrix(beta_hat_optim, 5)
+
 # find the differences
 
-beta_hat_optim - beta_hat_form
-(get_squared_error(beta_hat_optim,X,y) - get_squared_error(beta_hat_form,X,y)) / get_squared_error(beta_hat_form,X,y)
+diff <- beta_hat_optim - beta_hat_form
+diff_perc <- (get_squared_error(beta_hat_optim,X,y) - get_squared_error(beta_hat_form,X,y)) / get_squared_error(beta_hat_form,X,y)
+
+cat('Difference:\n')
+create_latex_matrix(diff, 5)
+
+cat('Criterion difference:\n')
+create_latex_matrix(diff_perc, 5)
