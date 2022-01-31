@@ -34,17 +34,17 @@ X <- data_binary %>%
   select(cons, distance, dep_delay) %>% 
   as.matrix()
 
-# write a function to return log likelihood
+# write a function to return simplified log likelihood, which is
+# more numerically stable, apparently
 
 get_ll <- function(b_hat,X_val,y_val){
   if (length(b_hat) != dim(X_val)[2] | length(y_val) != dim(X_val)[1]){
     stop('Dimension mismatch.')
   }
   
-  exp_term <- exp(X_val %*% b_hat)
-  prob_1 <- exp_term / (1 + exp_term)
-  prob_0 <- 1-prob_1
-  return(-1 * sum(y_val * log(prob_1) + (1-y_val) * log(prob_0)))
+  prod <- X_val %*% b_hat
+  exp_term <- exp(prod)
+  return(-1 * sum(y_val * prod - log(1 + exp_term)))
 }
 
 # run a regression to get starting coefficients
@@ -53,7 +53,7 @@ lm_coef <- lm(late ~ distance + dep_delay, data = data_binary)$coefficients
 
 # optimize to get the minimum
 
-optimization <- optim(c(-2,-.05,.01), get_ll, X_val = X, y_val = y, control = list(maxit = 1000000))
+optimization <- optim(lm_coef, get_ll, X_val = X, y_val = y, control = list(maxit = 1000000))
 beta_hat_optim <- optimization$par
 names(beta_hat_optim) <- dimnames(X)[[2]]
 

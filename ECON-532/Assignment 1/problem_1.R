@@ -71,7 +71,9 @@ get_squared_error <- function(b_hat,X_val,y_val){
 
 # optimize to get the minimum
 
-optimization <- optim(rep(0,dim(X)[2]), get_squared_error, X_val = X, y_val = y, control = list(maxit = 1000000))
+optimization <- optim(rep(0,dim(X)[2]), get_squared_error, X_val = X, y_val = y, 
+                      control = list(maxit = 1000000,
+                                     reltol = 1e-30))
 beta_hat_optim <- optimization$par
 names(beta_hat_optim) <- dimnames(X)[[2]]
 
