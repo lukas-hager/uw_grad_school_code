@@ -1,10 +1,27 @@
-rm(list = ls())
-gc()
-gc()
+---
+title: "Assignment 4"
+author: "Lukas Hager"
+date: "2/1/2022"
+output: 
+  html_document:
+    keep_md: true
+always_allow_html: true
+---
 
-library(data.table)
-library(evd)
-library(tidyverse)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+library(kableExtra)
+```
+
+#### Frequency Estimation of $\hat{P}$ and $\hat{p}$
+
+The code to create the frequency estimator is below:
+
+```{r q1a}
+suppressMessages(library(data.table))
+suppressMessages(library(evd))
+suppressMessages(library(tidyverse))
 
 options(dplyr.summarise.inform = FALSE)
 
@@ -46,33 +63,6 @@ sims <- bind_rows(
     }
   })
 )
-
-# sims <- bind_rows(
-#   lapply(c(1:20000),function(i){
-#     if(i == 1){
-#       x_old <<- x
-#       return(c('i_t' = 0, 'x_t' = x))
-#     }else{
-#       lambda <- rbinom(1,1,.8)
-#       
-#       x_new <- min(x_old + lambda, 10)
-#       
-#       prob <- v_final %>% 
-#         slice(x_new+1) %>% 
-#         pull(p)
-#       
-#       i_t <- rbinom(1,1,prob)
-#       
-#       if(i_t == 1){
-#         x_old <<- 0
-#       }else{
-#         x_old <<- x_new
-#       }
-#       return(c('i_t' = i_t, 'x_t' = x_new))
-#       
-#     }
-#   })
-# )
 
 # we have to permute some of the values away from 1 so that we can take a log
 
@@ -132,7 +122,26 @@ G_1 <- matrix(sapply(c(0:10),
               byrow = TRUE)
 
 G <- P_xt * G_1 + (1-P_xt) * G_0
+```
 
+This yields a value of $\hat{P}$ (which is $\mathbb{P}(i_t == 1|x_t)$) of
+
+```{r, echo=FALSE}
+P_xt
+```
+
+The values of $\hat{p}$ and $\hat{P}$ imply this transition matrix:
+```{r, echo=FALSE}
+G
+```
+Note that we needed to make two small modifications to allow for estimation of the problem, due to the simulated data. First, we needed to assign the transition probability of $x_t = 10$ if $i_t = 0$, as this does not occur in the data. Second, we need to adjust any value of $\hat{p} = 1$ to $\hat{p} = .99$ to ensure that we can estimate the model (as $\log(0)$ is undefined). 
+
+#### Compute Likelihood
+
+We use the above transition matrix to solve
+$$\hat{V} = \left(I - \beta G)^{-1}\Pi$$
+for any parameters $\theta_31,\theta_32,\theta_3$. We can then compute the likelihood by comparing the implied probabilities to the true probabilities from the simulation:
+```{r}
 mu = .5772
 beta = .95
 
@@ -188,11 +197,24 @@ V <- solve(diag(11) - beta * G) %*% Pi
 V_0 <- as.numeric(-theta1 * c(0:10) -theta2 * c(0:10)^2 + beta * G_0 %*% V)
 V_1 <- as.numeric(-theta3 + beta * G_1 %*% V)
 
+```
+
+Our top likelihood parameter choices are
+
+```{r,echo=FALSE}
+head(likelihoods) %>% 
+  kable(.) %>%
+  kable_styling(full_width = FALSE)
+```
+
+#### Forward Simulation
+
+We forward simulate 1000 times per starting value of $x_t$ and subsequently compute the continuation payoff. We then get the choice specific value functions by adding the flow utility for each state, and then use these to get implied replacement probabilities. Finally, we can match those to the data to get a likelihood.
+
+```{r}
 v_data <- data.table(V_0, V_1) %>% 
   mutate(v_diff = V_1 - V_0) %>% 
   pull(v_diff)
-
-# simulate
 
 v_diff <- log(P_xt) - log(1-P_xt)
 
@@ -292,14 +314,50 @@ likelihoods_fs <- bind_rows(
   get_likelihood_fs(seq(.1,1,by =.1), seq(0,.1,by=.01), seq(3,4,by=.1))
 ) %>% 
   arrange(desc(ll))
+```
 
-theta1_fs <- likelihoods %>% slice(1) %>% pull(t1)
-theta2_fs <- likelihoods %>% slice(1) %>% pull(t2)
-theta3_fs <- likelihoods %>% slice(1) %>% pull(t3)
+Our top likelihood parameter choices are
+
+```{r, echo=FALSE}
+head(likelihoods_fs) %>% 
+  kable() %>%
+  kable_styling(full_width = FALSE)
+```
+
+#### Comparison
+
+We can use our parameters to get the value functions and choice probabilities via forward simulation:
+
+```{r}
+theta1_fs <- likelihoods_fs %>% slice(1) %>% pull(t1)
+theta2_fs <- likelihoods_fs %>% slice(1) %>% pull(t2)
+theta3_fs <- likelihoods_fs %>% slice(1) %>% pull(t3)
 
 continuation <- - theta1_fs * A$A_val -theta2_fs * D$D_val - theta3_fs * B$B_val + C$C_val
 
 V_0_fs <- - theta1_fs * c(0:10) - theta2_fs *c(0:10)^2 + continuation
 V_1_fs <- - theta3_fs + continuation
 
-probs <- data.table('x_t' = c(0:10), 'V_0' = V_0_fs, 'V_1' = V_1_fs, 'p' = 1/(1+exp(V_0-V_1)))
+probs <- data.table('x_t' = c(0:10), 'V_0' = V_0_fs, 'V_1' = V_1_fs, 'p' = 1/(1+exp(V_0_fs-V_1_fs)))
+```
+
+Then we have, via forward simulation:
+
+```{r, echo=FALSE}
+probs %>% 
+  kable(.) %>%
+  kable_styling(full_width = FALSE)
+```
+
+The full solution yields:
+
+```{r, echo=FALSE}
+v_final %>% 
+  kable(.) %>%
+  kable_styling(full_width = FALSE)
+```
+
+
+```{r, results='asis', echo=FALSE}
+cat(str_interp('We see that the value functions are fairly different, although the replacement probabilities are close (which is to be expected due to the method employed). Further, the forward simulation method fails to recover the correct parameters, returning (${theta1_fs},${theta2_fs},${theta3_fs}) instead of (.3,0,4). I suspect this is because the data from the initial simulation is spotty for certain values of $x_t$, which will cause the forward simulations to be inexact.'))
+```
