@@ -47,32 +47,32 @@ sims <- bind_rows(
   })
 )
 
-# sims <- bind_rows(
-#   lapply(c(1:20000),function(i){
-#     if(i == 1){
-#       x_old <<- x
-#       return(c('i_t' = 0, 'x_t' = x))
-#     }else{
-#       lambda <- rbinom(1,1,.8)
-#       
-#       x_new <- min(x_old + lambda, 10)
-#       
-#       prob <- v_final %>% 
-#         slice(x_new+1) %>% 
-#         pull(p)
-#       
-#       i_t <- rbinom(1,1,prob)
-#       
-#       if(i_t == 1){
-#         x_old <<- 0
-#       }else{
-#         x_old <<- x_new
-#       }
-#       return(c('i_t' = i_t, 'x_t' = x_new))
-#       
-#     }
-#   })
-# )
+sims <- bind_rows(
+  lapply(c(1:500000),function(i){
+    if(i == 1){
+      x_old <<- x
+      return(c('i_t' = 0, 'x_t' = x))
+    }else{
+      lambda <- rbinom(1,1,.8)
+
+      x_new <- min(x_old + lambda, 10)
+
+      prob <- v_final %>%
+        slice(x_new+1) %>%
+        pull(p)
+
+      i_t <- rbinom(1,1,prob)
+
+      if(i_t == 1){
+        x_old <<- 0
+      }else{
+        x_old <<- x_new
+      }
+      return(c('i_t' = i_t, 'x_t' = x_new))
+
+    }
+  })
+)
 
 # we have to permute some of the values away from 1 so that we can take a log
 
@@ -227,7 +227,7 @@ all_sims <- bind_rows(
 
 A <- all_sims %>% 
   group_by(sim_no, start_val) %>% 
-  summarise(val = sum((row_number() != 1) * (x_t * (1-i_t)) * beta^(row_number()-1))) %>% 
+  summarise(val = sum(x_t * (1-i_t) * beta^(row_number()))) %>% 
   ungroup() %>% 
   group_by(start_val) %>% 
   summarise(A_val = (1 / n_distinct(sim_no)) * sum(val)) %>% 
@@ -235,7 +235,7 @@ A <- all_sims %>%
   
 B <- all_sims %>% 
   group_by(sim_no, start_val) %>% 
-  summarise(val = sum((row_number() != 1) * i_t * beta^(row_number()-1))) %>% 
+  summarise(val = sum(i_t * beta^(row_number()))) %>% 
   ungroup() %>% 
   group_by(start_val) %>% 
   summarise(B_val = (1 / n_distinct(sim_no)) * sum(val)) %>% 
@@ -243,7 +243,7 @@ B <- all_sims %>%
 
 C <- all_sims %>% 
   group_by(sim_no, start_val) %>% 
-  summarise(val = sum((row_number() != 1) * (e_1 * i_t + e_0 * (1-i_t)) * beta^(row_number()-1))) %>% 
+  summarise(val = sum((e_1 * i_t + e_0 * (1-i_t)) * beta^(row_number()))) %>% 
   ungroup() %>% 
   group_by(start_val) %>% 
   summarise(C_val = (1 / n_distinct(sim_no)) * sum(val)) %>% 
@@ -251,7 +251,7 @@ C <- all_sims %>%
 
 D <- all_sims %>% 
   group_by(sim_no, start_val) %>% 
-  summarise(val = sum((row_number() != 1) * (x_t * (1-i_t))^2 * beta^(row_number()-1))) %>% 
+  summarise(val = sum(x_t * (1-i_t))^2 * beta^(row_number())) %>% 
   ungroup() %>% 
   group_by(start_val) %>% 
   summarise(D_val = (1 / n_distinct(sim_no)) * sum(val)) %>% 
@@ -271,8 +271,8 @@ get_likelihood_fs <- function(t1_vals, t2_vals, t3_vals){
     
     continuation <- - t1 * A$A_val -t2 * D$D_val - t3 * B$B_val + C$C_val
     
-    V_0 <- - t1 * c(0:10) - t2 * c(0:10)^2 + continuation 
-    V_1 <- - t3 + continuation
+    V_0 <- - t1 * c(0:10) - t2 * c(0:10)^2 + as.numeric(G_0 %*% continuation)
+    V_1 <- - t3 + continuation[1] * G_0[1,1] + continuation[2] * G_0[1,2]
     
     probs <- data.table('x_t' = c(0:10), 'p' = 1/(1+exp(V_0-V_1)))
     
@@ -293,13 +293,13 @@ likelihoods_fs <- bind_rows(
 ) %>% 
   arrange(desc(ll))
 
-theta1_fs <- likelihoods %>% slice(1) %>% pull(t1)
-theta2_fs <- likelihoods %>% slice(1) %>% pull(t2)
-theta3_fs <- likelihoods %>% slice(1) %>% pull(t3)
+theta1_fs <- likelihoods_fs %>% slice(1) %>% pull(t1)
+theta2_fs <- likelihoods_fs %>% slice(1) %>% pull(t2)
+theta3_fs <- likelihoods_fs %>% slice(1) %>% pull(t3)
 
 continuation <- - theta1_fs * A$A_val -theta2_fs * D$D_val - theta3_fs * B$B_val + C$C_val
 
-V_0_fs <- - theta1_fs * c(0:10) - theta2_fs *c(0:10)^2 + continuation
-V_1_fs <- - theta3_fs + continuation
+V_0_fs <- - theta1_fs * c(0:10) - theta2_fs *c(0:10)^2 + as.numeric(G_0 %*% continuation)
+V_1_fs <- - theta3_fs + continuation[1] * G_0[1,1] + continuation[2] * G_0[1,2]
 
-probs <- data.table('x_t' = c(0:10), 'V_0' = V_0_fs, 'V_1' = V_1_fs, 'p' = 1/(1+exp(V_0-V_1)))
+probs <- data.table('x_t' = c(0:10), 'V_0' = V_0_fs, 'V_1' = V_1_fs, 'p' = 1/(1+exp(V_0_fs-V_1_fs)))

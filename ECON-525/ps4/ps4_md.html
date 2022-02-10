@@ -588,6 +588,8 @@ suppressMessages(library(tidyverse))
 
 options(dplyr.summarise.inform = FALSE)
 
+set.seed(2022)
+
 yuya_rvs &lt;- fread(&#39;/Users/hlukas/Google Drive/Grad School/2021-2022/Winter/ECON 525/Problem Sets/Assignment 2-3/draw.csv&#39;) %&gt;% 
   mutate(lambda = as.numeric(V2 &gt;= .2))
 
@@ -596,33 +598,28 @@ v_final &lt;- fread(&#39;/Users/hlukas/Google Drive/Grad School/2021-2022/Winter
 x &lt;- 0
 
 sims &lt;- bind_rows(
-  lapply(c(1:5000),function(i){
+  lapply(c(1:500000),function(i){
     if(i == 1){
       x_old &lt;&lt;- x
       return(c(&#39;i_t&#39; = 0, &#39;x_t&#39; = x))
     }else{
-      lambda &lt;- yuya_rvs %&gt;% 
-        slice(i) %&gt;% 
-        pull(lambda)
-      
+      lambda &lt;- rbinom(1,1,.8)
+
       x_new &lt;- min(x_old + lambda, 10)
-      
-      prob &lt;- v_final %&gt;% 
-        slice(x_new+1) %&gt;% 
+
+      prob &lt;- v_final %&gt;%
+        slice(x_new+1) %&gt;%
         pull(p)
-      
-      i_t &lt;- yuya_rvs %&gt;% 
-        slice(i) %&gt;% 
-        mutate(i = as.numeric(V1 &gt;= 1-prob)) %&gt;% 
-        pull(i)
-      
+
+      i_t &lt;- rbinom(1,1,prob)
+
       if(i_t == 1){
         x_old &lt;&lt;- 0
       }else{
         x_old &lt;&lt;- x_new
       }
       return(c(&#39;i_t&#39; = i_t, &#39;x_t&#39; = x_new))
-      
+
     }
   })
 )
@@ -686,38 +683,38 @@ G_1 &lt;- matrix(sapply(c(0:10),
 
 G &lt;- P_xt * G_1 + (1-P_xt) * G_0</code></pre>
 <p>This yields a value of <span class="math inline">\(\hat{P}\)</span> (which is <span class="math inline">\(\mathbb{P}(i_t == 1|x_t)\)</span>) of</p>
-<pre><code>##  [1] 0.01158301 0.05140187 0.12290970 0.23697651 0.39442815 0.48360656
-##  [7] 0.59006211 0.74137931 0.72727273 0.66666667 0.99000000</code></pre>
+<pre><code>##  [1] 0.01719055 0.05478048 0.12681533 0.23506327 0.35780438 0.48466999
+##  [7] 0.59663624 0.68490409 0.74181594 0.82051282 0.85000000</code></pre>
 <p>The values of <span class="math inline">\(\hat{p}\)</span> and <span class="math inline">\(\hat{P}\)</span> imply this transition matrix:</p>
-<pre><code>##              [,1]      [,2]      [,3]      [,4]     [,5]      [,6]       [,7]
-##  [1,] 0.212355212 0.7876448 0.0000000 0.0000000 0.000000 0.0000000 0.00000000
-##  [2,] 0.007009346 0.2344237 0.7585670 0.0000000 0.000000 0.0000000 0.00000000
-##  [3,] 0.013377926 0.1095318 0.1856187 0.6914716 0.000000 0.0000000 0.00000000
-##  [4,] 0.046986721 0.1899898 0.0000000 0.1552605 0.607763 0.0000000 0.00000000
-##  [5,] 0.076530836 0.3178973 0.0000000 0.0000000 0.127566 0.4780059 0.00000000
-##  [6,] 0.106557377 0.3770492 0.0000000 0.0000000 0.000000 0.1092896 0.40710383
-##  [7,] 0.173913043 0.4161491 0.0000000 0.0000000 0.000000 0.0000000 0.07453416
-##  [8,] 0.206896552 0.5344828 0.0000000 0.0000000 0.000000 0.0000000 0.00000000
-##  [9,] 0.090909091 0.6363636 0.0000000 0.0000000 0.000000 0.0000000 0.00000000
-## [10,] 0.000000000 0.6666667 0.0000000 0.0000000 0.000000 0.0000000 0.00000000
-## [11,] 0.000000000 0.9900000 0.0000000 0.0000000 0.000000 0.0000000 0.00000000
-##             [,8]      [,9]     [,10]     [,11]
-##  [1,] 0.00000000 0.0000000 0.0000000 0.0000000
-##  [2,] 0.00000000 0.0000000 0.0000000 0.0000000
-##  [3,] 0.00000000 0.0000000 0.0000000 0.0000000
-##  [4,] 0.00000000 0.0000000 0.0000000 0.0000000
-##  [5,] 0.00000000 0.0000000 0.0000000 0.0000000
-##  [6,] 0.00000000 0.0000000 0.0000000 0.0000000
-##  [7,] 0.33540373 0.0000000 0.0000000 0.0000000
-##  [8,] 0.06896552 0.1896552 0.0000000 0.0000000
-##  [9,] 0.00000000 0.0000000 0.2727273 0.0000000
-## [10,] 0.00000000 0.0000000 0.0000000 0.3333333
-## [11,] 0.00000000 0.0000000 0.0000000 0.0100000</code></pre>
+<pre><code>##             [,1]      [,2]      [,3]      [,4]      [,5]      [,6]       [,7]
+##  [1,] 0.20226655 0.7977335 0.0000000 0.0000000 0.0000000 0.0000000 0.00000000
+##  [2,] 0.01077456 0.2321422 0.7570833 0.0000000 0.0000000 0.0000000 0.00000000
+##  [3,] 0.02651260 0.1003027 0.1748945 0.6982902 0.0000000 0.0000000 0.00000000
+##  [4,] 0.04633752 0.1887257 0.0000000 0.1521010 0.6128358 0.0000000 0.00000000
+##  [5,] 0.07312167 0.2846827 0.0000000 0.0000000 0.1285834 0.5136122 0.00000000
+##  [6,] 0.09586398 0.3888060 0.0000000 0.0000000 0.0000000 0.1027573 0.41257266
+##  [7,] 0.11727226 0.4793640 0.0000000 0.0000000 0.0000000 0.0000000 0.07927214
+##  [8,] 0.14078399 0.5441201 0.0000000 0.0000000 0.0000000 0.0000000 0.00000000
+##  [9,] 0.14206300 0.5997529 0.0000000 0.0000000 0.0000000 0.0000000 0.00000000
+## [10,] 0.15384615 0.6666667 0.0000000 0.0000000 0.0000000 0.0000000 0.00000000
+## [11,] 0.16666667 0.6833333 0.0000000 0.0000000 0.0000000 0.0000000 0.00000000
+##             [,8]       [,9]      [,10]     [,11]
+##  [1,] 0.00000000 0.00000000 0.00000000 0.0000000
+##  [2,] 0.00000000 0.00000000 0.00000000 0.0000000
+##  [3,] 0.00000000 0.00000000 0.00000000 0.0000000
+##  [4,] 0.00000000 0.00000000 0.00000000 0.0000000
+##  [5,] 0.00000000 0.00000000 0.00000000 0.0000000
+##  [6,] 0.00000000 0.00000000 0.00000000 0.0000000
+##  [7,] 0.32409161 0.00000000 0.00000000 0.0000000
+##  [8,] 0.05821518 0.25688073 0.00000000 0.0000000
+##  [9,] 0.00000000 0.04879555 0.20938851 0.0000000
+## [10,] 0.00000000 0.00000000 0.03418803 0.1452991
+## [11,] 0.00000000 0.00000000 0.00000000 0.1500000</code></pre>
 <p>Note that we needed to make two small modifications to allow for estimation of the problem, due to the simulated data. First, we needed to assign the transition probability of <span class="math inline">\(x_t = 10\)</span> if <span class="math inline">\(i_t = 0\)</span>, as this does not occur in the data. Second, we need to adjust any value of <span class="math inline">\(\hat{p} = 1\)</span> to <span class="math inline">\(\hat{p} = .99\)</span> to ensure that we can estimate the model (as <span class="math inline">\(\log(0)\)</span> is undefined).</p>
 </div>
 <div id="compute-likelihood" class="section level4">
 <h4>Compute Likelihood</h4>
-<p>We use the above transition matrix to solve <span class="math display">\[\hat{V} = \left(I - \beta G)^{-1}\Pi\]</span> for any parameters <span class="math inline">\(\theta_31,\theta_32,\theta_3\)</span>. We can then compute the likelihood by comparing the implied probabilities to the true probabilities from the simulation:</p>
+<p>We use the above transition matrix to solve <span class="math display">\[\hat{V} = \left(I - \beta G\right)^{-1}\Pi\]</span> for any parameters <span class="math inline">\(\theta_1,\theta_2,\theta_3\)</span>. We can then compute the likelihood by comparing the implied probabilities to the true probabilities from the simulation:</p>
 <pre class="r"><code>mu = .5772
 beta = .95
 
@@ -799,38 +796,10 @@ ll
 0.00
 </td>
 <td style="text-align:right;">
-3.9
-</td>
-<td style="text-align:right;">
--2122.800
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.3
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-3.8
-</td>
-<td style="text-align:right;">
--2123.576
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.3
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
 4.0
 </td>
 <td style="text-align:right;">
--2124.019
+-214494.9
 </td>
 </tr>
 <tr>
@@ -839,12 +808,26 @@ ll
 </td>
 <td style="text-align:right;">
 0.00
+</td>
+<td style="text-align:right;">
+3.9
+</td>
+<td style="text-align:right;">
+-214617.4
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:right;">
+0.02
 </td>
 <td style="text-align:right;">
 3.7
 </td>
 <td style="text-align:right;">
--2126.428
+-214874.9
 </td>
 </tr>
 <tr>
@@ -858,7 +841,7 @@ ll
 3.6
 </td>
 <td style="text-align:right;">
--2128.823
+-214914.8
 </td>
 </tr>
 <tr>
@@ -866,13 +849,27 @@ ll
 0.3
 </td>
 <td style="text-align:right;">
-0.01
+0.00
 </td>
 <td style="text-align:right;">
-4.0
+3.8
 </td>
 <td style="text-align:right;">
--2129.112
+-214945.6
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:right;">
+0.02
+</td>
+<td style="text-align:right;">
+3.8
+</td>
+<td style="text-align:right;">
+-215030.6
 </td>
 </tr>
 </tbody>
@@ -886,8 +883,6 @@ ll
   pull(v_diff)
 
 v_diff &lt;- log(P_xt) - log(1-P_xt)
-
-set.seed(2022)
 
 all_sims &lt;- bind_rows(
   lapply(c(1:11000),function(sim_no){
@@ -918,7 +913,7 @@ all_sims &lt;- bind_rows(
 
 A &lt;- all_sims %&gt;% 
   group_by(sim_no, start_val) %&gt;% 
-  summarise(val = sum((row_number() != 1) * (x_t * (1-i_t)) * beta^(row_number()-1))) %&gt;% 
+  summarise(val = sum(x_t * (1-i_t) * beta^(row_number()))) %&gt;% 
   ungroup() %&gt;% 
   group_by(start_val) %&gt;% 
   summarise(A_val = (1 / n_distinct(sim_no)) * sum(val)) %&gt;% 
@@ -926,7 +921,7 @@ A &lt;- all_sims %&gt;%
   
 B &lt;- all_sims %&gt;% 
   group_by(sim_no, start_val) %&gt;% 
-  summarise(val = sum((row_number() != 1) * i_t * beta^(row_number()-1))) %&gt;% 
+  summarise(val = sum(i_t * beta^(row_number()))) %&gt;% 
   ungroup() %&gt;% 
   group_by(start_val) %&gt;% 
   summarise(B_val = (1 / n_distinct(sim_no)) * sum(val)) %&gt;% 
@@ -934,7 +929,7 @@ B &lt;- all_sims %&gt;%
 
 C &lt;- all_sims %&gt;% 
   group_by(sim_no, start_val) %&gt;% 
-  summarise(val = sum((row_number() != 1) * (e_1 * i_t + e_0 * (1-i_t)) * beta^(row_number()-1))) %&gt;% 
+  summarise(val = sum((e_1 * i_t + e_0 * (1-i_t)) * beta^(row_number()))) %&gt;% 
   ungroup() %&gt;% 
   group_by(start_val) %&gt;% 
   summarise(C_val = (1 / n_distinct(sim_no)) * sum(val)) %&gt;% 
@@ -942,7 +937,7 @@ C &lt;- all_sims %&gt;%
 
 D &lt;- all_sims %&gt;% 
   group_by(sim_no, start_val) %&gt;% 
-  summarise(val = sum((row_number() != 1) * (x_t * (1-i_t))^2 * beta^(row_number()-1))) %&gt;% 
+  summarise(val = sum(x_t * (1-i_t))^2 * beta^(row_number())) %&gt;% 
   ungroup() %&gt;% 
   group_by(start_val) %&gt;% 
   summarise(D_val = (1 / n_distinct(sim_no)) * sum(val)) %&gt;% 
@@ -962,8 +957,8 @@ get_likelihood_fs &lt;- function(t1_vals, t2_vals, t3_vals){
     
     continuation &lt;- - t1 * A$A_val -t2 * D$D_val - t3 * B$B_val + C$C_val
     
-    V_0 &lt;- - t1 * c(0:10) - t2 * c(0:10)^2 + continuation 
-    V_1 &lt;- - t3 + continuation
+    V_0 &lt;- - t1 * c(0:10) - t2 * c(0:10)^2 + as.numeric(G_0 %*% continuation)
+    V_1 &lt;- - t3 + as.numeric(G_1 %*% continuation)
     
     probs &lt;- data.table(&#39;x_t&#39; = c(0:10), &#39;p&#39; = 1/(1+exp(V_0-V_1)))
     
@@ -1004,86 +999,86 @@ ll
 <tbody>
 <tr>
 <td style="text-align:right;">
-0.7
+0.3
 </td>
 <td style="text-align:right;">
-0.00
+0
+</td>
+<td style="text-align:right;">
+4.0
+</td>
+<td style="text-align:right;">
+-214954.8
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3.9
+</td>
+<td style="text-align:right;">
+-215442.5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3.8
+</td>
+<td style="text-align:right;">
+-216174.4
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:right;">
+0
 </td>
 <td style="text-align:right;">
 3.4
 </td>
 <td style="text-align:right;">
--2135.860
+-216381.3
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
-0.7
+0.2
 </td>
 <td style="text-align:right;">
-0.00
+0
 </td>
 <td style="text-align:right;">
 3.5
 </td>
 <td style="text-align:right;">
--2138.693
+-216432.3
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
-0.6
+0.2
 </td>
 <td style="text-align:right;">
-0.01
-</td>
-<td style="text-align:right;">
-3.2
-</td>
-<td style="text-align:right;">
--2139.450
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.6
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-3.1
-</td>
-<td style="text-align:right;">
--2139.461
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.7
-</td>
-<td style="text-align:right;">
-0.00
+0
 </td>
 <td style="text-align:right;">
 3.3
 </td>
 <td style="text-align:right;">
--2139.685
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-0.6
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-3.0
-</td>
-<td style="text-align:right;">
--2141.753
+-216576.7
 </td>
 </tr>
 </tbody>
@@ -1098,8 +1093,8 @@ theta3_fs &lt;- likelihoods_fs %&gt;% slice(1) %&gt;% pull(t3)
 
 continuation &lt;- - theta1_fs * A$A_val -theta2_fs * D$D_val - theta3_fs * B$B_val + C$C_val
 
-V_0_fs &lt;- - theta1_fs * c(0:10) - theta2_fs *c(0:10)^2 + continuation
-V_1_fs &lt;- - theta3_fs + continuation
+V_0_fs &lt;- - theta1_fs * c(0:10) - theta2_fs *c(0:10)^2 + as.numeric(G_0 %*% continuation)
+V_1_fs &lt;- - theta3_fs + as.numeric(G_1 %*% continuation)
 
 probs &lt;- data.table(&#39;x_t&#39; = c(0:10), &#39;V_0&#39; = V_0_fs, &#39;V_1&#39; = V_1_fs, &#39;p&#39; = 1/(1+exp(V_0_fs-V_1_fs)))</code></pre>
 <p>Then we have, via forward simulation:</p>
@@ -1126,13 +1121,13 @@ p
 0
 </td>
 <td style="text-align:right;">
--16.33540
+-5.527214
 </td>
 <td style="text-align:right;">
--19.73540
+-9.553619
 </td>
 <td style="text-align:right;">
-0.0322955
+0.0175257
 </td>
 </tr>
 <tr>
@@ -1140,13 +1135,13 @@ p
 1
 </td>
 <td style="text-align:right;">
--18.10528
+-6.708054
 </td>
 <td style="text-align:right;">
--20.80528
+-9.533170
 </td>
 <td style="text-align:right;">
-0.0629734
+0.0559819
 </td>
 </tr>
 <tr>
@@ -1154,13 +1149,13 @@ p
 2
 </td>
 <td style="text-align:right;">
--19.52787
+-7.793092
 </td>
 <td style="text-align:right;">
--21.52787
+-9.520966
 </td>
 <td style="text-align:right;">
-0.1192029
+0.1508598
 </td>
 </tr>
 <tr>
@@ -1168,13 +1163,13 @@ p
 3
 </td>
 <td style="text-align:right;">
--20.04357
+-8.454020
 </td>
 <td style="text-align:right;">
--21.34357
+-9.532735
 </td>
 <td style="text-align:right;">
-0.2141650
+0.2537493
 </td>
 </tr>
 <tr>
@@ -1182,13 +1177,13 @@ p
 4
 </td>
 <td style="text-align:right;">
--20.80334
+-8.946663
 </td>
 <td style="text-align:right;">
--21.40334
+-9.525602
 </td>
 <td style="text-align:right;">
-0.3543437
+0.3591768
 </td>
 </tr>
 <tr>
@@ -1196,13 +1191,13 @@ p
 5
 </td>
 <td style="text-align:right;">
--21.24745
+-9.565082
 </td>
 <td style="text-align:right;">
--21.14745
+-9.532080
 </td>
 <td style="text-align:right;">
-0.5249792
+0.5082498
 </td>
 </tr>
 <tr>
@@ -1210,13 +1205,13 @@ p
 6
 </td>
 <td style="text-align:right;">
--21.18419
+-10.003484
 </td>
 <td style="text-align:right;">
--20.38419
+-9.533299
 </td>
 <td style="text-align:right;">
-0.6899745
+0.6154275
 </td>
 </tr>
 <tr>
@@ -1224,13 +1219,13 @@ p
 7
 </td>
 <td style="text-align:right;">
--21.58281
+-10.456583
 </td>
 <td style="text-align:right;">
--20.08281
+-9.524428
 </td>
 <td style="text-align:right;">
-0.8175745
+0.7175122
 </td>
 </tr>
 <tr>
@@ -1238,13 +1233,13 @@ p
 8
 </td>
 <td style="text-align:right;">
--22.52327
+-11.004663
 </td>
 <td style="text-align:right;">
--20.32327
+-9.538277
 </td>
 <td style="text-align:right;">
-0.9002495
+0.8125075
 </td>
 </tr>
 <tr>
@@ -1252,13 +1247,13 @@ p
 9
 </td>
 <td style="text-align:right;">
--23.27421
+-11.257028
 </td>
 <td style="text-align:right;">
--20.37421
+-9.542228
 </td>
 <td style="text-align:right;">
-0.9478464
+0.8474578
 </td>
 </tr>
 <tr>
@@ -1266,13 +1261,13 @@ p
 10
 </td>
 <td style="text-align:right;">
--23.90722
+-11.533912
 </td>
 <td style="text-align:right;">
--20.30722
+-9.533770
 </td>
 <td style="text-align:right;">
-0.9734030
+0.8808121
 </td>
 </tr>
 </tbody>
@@ -1452,7 +1447,7 @@ p
 </tr>
 </tbody>
 </table>
-<p>We see that the value functions are fairly different, although the replacement probabilities are close (which is to be expected due to the method employed). Further, the forward simulation method fails to recover the correct parameters, returning (0.7,0,3.4) instead of (.3,0,4). I suspect this is because the data from the initial simulation is spotty for certain values of <span class="math inline">\(x_t\)</span>, which will cause the forward simulations to be inexact.</p>
+<p>We get very close to the same results, with the exact parameters recovered (although we needed to simulate the data 5 million times).</p>
 </div>
 
 

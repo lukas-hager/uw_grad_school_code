@@ -25,6 +25,8 @@ suppressMessages(library(tidyverse))
 
 options(dplyr.summarise.inform = FALSE)
 
+set.seed(2022)
+
 yuya_rvs <- fread('/Users/hlukas/Google Drive/Grad School/2021-2022/Winter/ECON 525/Problem Sets/Assignment 2-3/draw.csv') %>% 
   mutate(lambda = as.numeric(V2 >= .2))
 
@@ -33,33 +35,28 @@ v_final <- fread('/Users/hlukas/Google Drive/Grad School/2021-2022/Winter/ECON 5
 x <- 0
 
 sims <- bind_rows(
-  lapply(c(1:5000),function(i){
+  lapply(c(1:500000),function(i){
     if(i == 1){
       x_old <<- x
       return(c('i_t' = 0, 'x_t' = x))
     }else{
-      lambda <- yuya_rvs %>% 
-        slice(i) %>% 
-        pull(lambda)
-      
+      lambda <- rbinom(1,1,.8)
+
       x_new <- min(x_old + lambda, 10)
-      
-      prob <- v_final %>% 
-        slice(x_new+1) %>% 
+
+      prob <- v_final %>%
+        slice(x_new+1) %>%
         pull(p)
-      
-      i_t <- yuya_rvs %>% 
-        slice(i) %>% 
-        mutate(i = as.numeric(V1 >= 1-prob)) %>% 
-        pull(i)
-      
+
+      i_t <- rbinom(1,1,prob)
+
       if(i_t == 1){
         x_old <<- 0
       }else{
         x_old <<- x_new
       }
       return(c('i_t' = i_t, 'x_t' = x_new))
-      
+
     }
   })
 )
@@ -139,8 +136,8 @@ Note that we needed to make two small modifications to allow for estimation of t
 #### Compute Likelihood
 
 We use the above transition matrix to solve
-$$\hat{V} = \left(I - \beta G)^{-1}\Pi$$
-for any parameters $\theta_31,\theta_32,\theta_3$. We can then compute the likelihood by comparing the implied probabilities to the true probabilities from the simulation:
+$$\hat{V} = \left(I - \beta G\right)^{-1}\Pi$$
+for any parameters $\theta_1,\theta_2,\theta_3$. We can then compute the likelihood by comparing the implied probabilities to the true probabilities from the simulation:
 ```{r}
 mu = .5772
 beta = .95
@@ -218,14 +215,12 @@ v_data <- data.table(V_0, V_1) %>%
 
 v_diff <- log(P_xt) - log(1-P_xt)
 
-set.seed(2022)
-
 all_sims <- bind_rows(
   lapply(c(1:11000),function(sim_no){
     x_old <<- sim_no %% 11
     e_0 <<- rgumbel(200)
     e_1 <<- rgumbel(200)
-    e_diff <<-  e_0 - e_1
+    e_diff <<- e_0 - e_1
     sims <- bind_rows(
       lapply(c(1:200), function(i){
         i_t <- as.numeric(v_data[x_old + 1] > e_diff[i])
@@ -249,7 +244,7 @@ all_sims <- bind_rows(
 
 A <- all_sims %>% 
   group_by(sim_no, start_val) %>% 
-  summarise(val = sum((row_number() != 1) * (x_t * (1-i_t)) * beta^(row_number()-1))) %>% 
+  summarise(val = sum(x_t * (1-i_t) * beta^(row_number()))) %>% 
   ungroup() %>% 
   group_by(start_val) %>% 
   summarise(A_val = (1 / n_distinct(sim_no)) * sum(val)) %>% 
@@ -257,7 +252,7 @@ A <- all_sims %>%
   
 B <- all_sims %>% 
   group_by(sim_no, start_val) %>% 
-  summarise(val = sum((row_number() != 1) * i_t * beta^(row_number()-1))) %>% 
+  summarise(val = sum(i_t * beta^(row_number()))) %>% 
   ungroup() %>% 
   group_by(start_val) %>% 
   summarise(B_val = (1 / n_distinct(sim_no)) * sum(val)) %>% 
@@ -265,7 +260,7 @@ B <- all_sims %>%
 
 C <- all_sims %>% 
   group_by(sim_no, start_val) %>% 
-  summarise(val = sum((row_number() != 1) * (e_1 * i_t + e_0 * (1-i_t)) * beta^(row_number()-1))) %>% 
+  summarise(val = sum((e_1 * i_t + e_0 * (1-i_t)) * beta^(row_number()))) %>% 
   ungroup() %>% 
   group_by(start_val) %>% 
   summarise(C_val = (1 / n_distinct(sim_no)) * sum(val)) %>% 
@@ -273,7 +268,7 @@ C <- all_sims %>%
 
 D <- all_sims %>% 
   group_by(sim_no, start_val) %>% 
-  summarise(val = sum((row_number() != 1) * (x_t * (1-i_t))^2 * beta^(row_number()-1))) %>% 
+  summarise(val = sum((x_t * (1-i_t))^2 * beta^(row_number()))) %>% 
   ungroup() %>% 
   group_by(start_val) %>% 
   summarise(D_val = (1 / n_distinct(sim_no)) * sum(val)) %>% 
@@ -293,8 +288,8 @@ get_likelihood_fs <- function(t1_vals, t2_vals, t3_vals){
     
     continuation <- - t1 * A$A_val -t2 * D$D_val - t3 * B$B_val + C$C_val
     
-    V_0 <- - t1 * c(0:10) - t2 * c(0:10)^2 + continuation 
-    V_1 <- - t3 + continuation
+    V_0 <- - t1 * c(0:10) - t2 * c(0:10)^2 + as.numeric(G_0 %*% continuation)
+    V_1 <- - t3 + as.numeric(G_1 %*% continuation)
     
     probs <- data.table('x_t' = c(0:10), 'p' = 1/(1+exp(V_0-V_1)))
     
@@ -335,8 +330,8 @@ theta3_fs <- likelihoods_fs %>% slice(1) %>% pull(t3)
 
 continuation <- - theta1_fs * A$A_val -theta2_fs * D$D_val - theta3_fs * B$B_val + C$C_val
 
-V_0_fs <- - theta1_fs * c(0:10) - theta2_fs *c(0:10)^2 + continuation
-V_1_fs <- - theta3_fs + continuation
+V_0_fs <- - theta1_fs * c(0:10) - theta2_fs *c(0:10)^2 + as.numeric(G_0 %*% continuation)
+V_1_fs <- - theta3_fs + as.numeric(G_1 %*% continuation)
 
 probs <- data.table('x_t' = c(0:10), 'V_0' = V_0_fs, 'V_1' = V_1_fs, 'p' = 1/(1+exp(V_0_fs-V_1_fs)))
 ```
@@ -357,7 +352,4 @@ v_final %>%
   kable_styling(full_width = FALSE)
 ```
 
-
-```{r, results='asis', echo=FALSE}
-cat(str_interp('We see that the value functions are fairly different, although the replacement probabilities are close (which is to be expected due to the method employed). Further, the forward simulation method fails to recover the correct parameters, returning (${theta1_fs},${theta2_fs},${theta3_fs}) instead of (.3,0,4). I suspect this is because the data from the initial simulation is spotty for certain values of $x_t$, which will cause the forward simulations to be inexact.'))
-```
+We get very close to the same results, with the exact parameters recovered (although we needed to simulate the data 5 million times).
