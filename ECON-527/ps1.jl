@@ -1,10 +1,22 @@
-using QuantEcon
-using StatsBase
-using Statistics
-using BasicInterpolators
-using Random
-using Plots
-using Printf
+# to run OOB for Dr. Greaney, stealing this code from Ralf_Dietrich
+# https://discourse.julialang.org/t/how-to-use-pkg-dependencies-instead-of-pkg-installed/36416/19
+
+# Make sure all needed Pkg's are ready to go
+neededPackages = [
+    :QuantEcon, 
+    :StatsBase,
+    :Statistics,
+    :BasicInterpolators,
+    :Random,
+    :Plots,
+    :Printf
+] 
+
+using Pkg;
+for neededpackage in neededPackages
+    (String(neededpackage) in keys(Pkg.project().dependencies)) || Pkg.add(String(neededpackage))
+    @eval using $neededpackage
+end
 
 # set the seed
 Random.seed!(42069)
@@ -29,17 +41,17 @@ function appx_stats(appx)
     sim_results = QuantEcon.simulate!(simulations, appx; init=start_vals)
 
     # calculate autocorrelation
-    sims_autocor = mean(autocor(sim_results, [1]), dims=2)[1]
+    sims_autocor = mean(autocor(sim_results, [1]))[1]
 
     # calculate variance
-    sims_var = mean(var(sim_results, dims=1), dims = 2)[1]
+    sims_var = mean(var(sim_results, dims=2))[1]
 
     # calculate autocovariance
-    sims_autocov = mean(autocov(sim_results, [1]), dims=2)[1]
+    sims_autocov = cov(vec(sim_results[2:end, 1:end]), vec(sim_results[1:(end-1), 1:end]))
 
     # calculate conditional variance
     sims_cond_var_mat = sim_results[2:end, 1:end] - rho * sim_results[1:(end-1), 1:end]
-    sims_cond_var = mean(var(sims_cond_var_mat, dims=1), dims = 2)[1]
+    sims_cond_var = mean(var(sims_cond_var_mat, dims=2))
 
     @printf "Autocorrelation ratio: %.4f \n" sims_autocor / rho
     @printf "Variance ratio: %.4f\n" sims_var / (sigma^2 / (1 - rho^2))
